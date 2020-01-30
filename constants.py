@@ -1,0 +1,1 @@
+SYNAPSE_default_weight = 1
