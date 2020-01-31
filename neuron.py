@@ -104,7 +104,6 @@ class Synapse() :
         self.t_pre = self.time
         if self.neuron_type == SYNAPSE_excitatory :
             self.weight, self.g = tools.weight_modify(self.t_pre - self.t_post, self.weight, self.g)
-        self.fired = True
 
     def post_fired(self, ):
         self.t_post = self.time

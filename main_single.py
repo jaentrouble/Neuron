@@ -25,20 +25,20 @@ for j in range(N_s) :
     else :
         s_list.append(neuron.Synapse(pre, post, SYNAPSE_inhibitory, j))
 
-t = 3000
+t = 1000
 input_neurons = n_list[:10]
-inhibit_neurons = n_list[-5:]
+# inhibit_neurons = n_list[-5:]
 log = []
+pre_fired = []
+post_fired = []
+fired_to_neurons = []
 
 for loop in range(t) :
-    pre_fired = []
-    post_fired = []
-    fired_to_neurons = []
+
     for n in n_list :
         n.tick()
     for s in s_list :
         s.tick()
-
     
     # 1
     for n in n_list :
@@ -47,25 +47,29 @@ for loop in range(t) :
             pre_fired.extend(e)
             post_fired.extend(i)
 
-    #2
-    for s_index in pre_fired :
-        s_list[s_index].pre_fired()
-    for s_index in post_fired :
-        s_list[s_index].post_fired()
-
     #3
     for s in s_list :
         if s.is_fired() :
             fired_to_neurons.append(s.get_signal())
 
+    #2
+    for s_index in post_fired :
+        s_list[s_index].post_fired()
+    for s_index in pre_fired :
+        s_list[s_index].pre_fired()
+
     #4
     for n in fired_to_neurons :
         n_list[n[1]].input_potential(n[0])
 
+    pre_fired = []
+    post_fired = []
+    fired_to_neurons = []
+
     #4.5
-    if random.random() < 0.5 :
+    if random.random() < 1 :
         for n in input_neurons :
-            n.input_potential(100)
+            n.input_potential(50)
     # if random.random() < 0.2 :
     #     for n in inhibit_neurons :
     #         n.input_potential(-10)
