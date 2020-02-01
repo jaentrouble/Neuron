@@ -72,6 +72,12 @@ class Neuron():
         self.potential = NEURON_undershoot
         return self.in_synapses.copy(), self.ex_synapses.copy()
 
+    def get_id(self) :
+        return self.id
+
+    def get_potential(self) :
+        return self.potential
+
 class Synapse() :
     """
     Synapse
@@ -119,3 +125,6 @@ class Synapse() :
 
     def get_weight(self) :
         return self.weight
+
+    def get_id(self) :
+        return self.id

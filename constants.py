@@ -4,6 +4,12 @@ SYNAPSE_not_fired_yet = -1
 SYNAPSE_excitatory = 1
 SYNAPSE_inhibitory = -1
 
+MULTI_sentinel = -1
+MULTI_potent_log = 0
+MULTI_fired_neuron_log = 1
+MULTI_weight_log = 2
+MULTI_fired_synapse_log = 3
+
 #modifiable----
 SYNAPSE_decay = 0.995
 SYNAPSE_default_weight = 1
