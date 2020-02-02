@@ -90,7 +90,7 @@ class Synapse() :
         Synapse
         neuron_type : inhibitory or excitatory
         """
-        # self.pre_neuron = pre
+        self.pre_neuron = pre
         self.post_neuron = post
         self.neuron_type = neuron_type
         self.weight = SYNAPSE_default_weight
@@ -129,3 +129,6 @@ class Synapse() :
 
     def get_id(self) :
         return self.id
+
+    def get_connection(self) :
+        return [self.pre_neuron, self.post_neuron]

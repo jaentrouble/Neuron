@@ -11,6 +11,9 @@ MULTI_weight_log = 2
 MULTI_fired_synapse_log = 3
 
 LOG_path = 'log'
+LOG_multi_neuron_name = 'log_neuron_thread_{}.json'
+LOG_multi_synapse_name = 'log_synapse_thread_{}.json'
+LOG_connection_name = 'log_connection.json'
 
 #modifiable----
 SYNAPSE_decay = 0.995
@@ -25,3 +28,7 @@ NEURON_threshold = 6
 NEURON_rest = 0
 NEURON_undershoot = -2
 NEURON_decay = 1
+
+VIEWER_soma_size = 3
+VIEWER_fired_color = (255,255,0)
+VIEWER_dendrite_thick = 1

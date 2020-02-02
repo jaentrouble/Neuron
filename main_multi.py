@@ -4,6 +4,7 @@ from multi import thread_func as tf
 import random
 import rapidjson
 from multiprocessing import Process, Queue, freeze_support
+import os
 """
 Every Neurons and Synapses are called as their index (or ID)
 """
@@ -11,14 +12,14 @@ Every Neurons and Synapses are called as their index (or ID)
 N_N_THREAD = 2
 N_S_THREAD = 4
 # numbers per Thread
-N_NEURON = 100
-N_SYNAPSE = 3000
+N_NEURON = 10
+N_SYNAPSE = 100
 # Excitatory synapse ratio
 S_E_ratio = 0.9
 # Total simulation time
-TICKS = 1000
+TICKS = 10
 # N of neurons to give External input
-EXTERNAL_N_neuron = 10
+EXTERNAL_N_neuron = 2
 EXTERNAL_potential = 10
 
 class Main_multi() :
@@ -91,6 +92,19 @@ class Main_multi() :
             tmp.append([potential,i])
         return tmp
 
+    def connection_logging(self) :
+        """
+        connection_logging
+        synapse-based
+        [[0's pre, 0's post], [1's pre, 1's post], ... ]
+        """
+        connections = []
+        for s in self.s_list :
+            connections.append(s.get_connection())
+        with open(os.path.join(LOG_path, LOG_connection_name), 'w') as logfile :
+            rapidjson.dump(connections, logfile)
+
+
     def run(self) :
         for n_p in self.n_procs :
             n_p.start()
@@ -109,7 +123,7 @@ class Main_multi() :
             print('Tick : {}'.format(t+1))
             external = self.external_potential(EXTERNAL_N_neuron, EXTERNAL_potential)
             for n in external :
-                total_potentials[n[0]//N_NEURON].append(n)
+                total_potentials[n[1]//N_NEURON].append(n)
 
             for idx, Q in enumerate(self.n_potential_Q) :
                 Q.put(total_potentials[idx])
@@ -147,6 +161,7 @@ class Main_multi() :
         #     neuron_log.append(self.n_log_Q.get())
         # while len(synapse_log) < N_S_THREAD :
         #     synapse_log.append(self.s_log_Q.get())
+        self.connection_logging()
 
         for n_p in self.n_procs :
             n_p.join()

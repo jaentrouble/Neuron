@@ -38,7 +38,7 @@ def neuron_init(n_list : list, pre_Q : Queue, post_Q : Queue, Potential_Q : Queu
         pre_Q.put(pre_fired)
         post_Q.put(post_fired)
 
-    with open(os.path.join(LOG_path,'log_neuron_thread_{}.json'.format(num)), 'w') as logfile :
+    with open(os.path.join(LOG_path, LOG_multi_neuron_name.format(num)), 'w') as logfile :
         rapidjson.dump({
             str(MULTI_potent_log) : potent_log,
             str(MULTI_fired_neuron_log) : fired_log,
@@ -79,7 +79,7 @@ def synapse_init(s_list : list, pre_Q : Queue, post_Q : Queue, Potential_Q : Que
         fired_log.append(tmp_fired)
         Potential_Q.put(fired_to_neurons)
 
-    with open(os.path.join(LOG_path,'log_synapse_thread_{}.json'.format(num)), 'w') as logfile :
+    with open(os.path.join(LOG_path, LOG_multi_synapse_name.format(num)), 'w') as logfile :
         rapidjson.dump({
             str(MULTI_weight_log) : weight_log,
             str(MULTI_fired_synapse_log) : fired_log,
