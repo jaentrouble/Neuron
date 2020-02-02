@@ -22,13 +22,13 @@ SYNAPSE_default_g = 0.005
 
 WEIGHT_g_max = 0.015
 WEIGHT_F_max = 0.005 
-WEIGHT_t_0 = 8 
+WEIGHT_t_0 = 12
 
-NEURON_threshold = 6
+NEURON_threshold = 10
 NEURON_rest = 0
 NEURON_undershoot = -2
 NEURON_decay = 1
 
-VIEWER_soma_size = 3
+VIEWER_soma_size = 5
 VIEWER_fired_color = (255,255,0)
 VIEWER_dendrite_thick = 1

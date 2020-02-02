@@ -52,11 +52,18 @@ class Log() :
 
         self.n_num = len(self.merged_potent[0])
         self.s_num = len(self.connections)
+        self.max_tick = len(self.merged_potent)
 
     def get_log(self, tick : int) :
         """
         get_log
         get a dictionary of a certain tick
+        returns {
+            MULTI_potent_log : self.merged_potent[tick],
+            MULTI_fired_neuron_log : self.merged_f_n[tick],
+            MULTI_weight_log : self.merged_weight[tick],
+            MULTI_fired_synapse_log : self.merged_f_s[tick],
+        }
         """
         return {
             MULTI_potent_log : self.merged_potent[tick],
@@ -67,3 +74,12 @@ class Log() :
 
     def get_connections(self) :
         return self.connections.copy()
+
+    def get_n_num(self):
+        return self.n_num
+
+    def get_s_num(self) :
+        return self.s_num
+
+    def get_max_tick(self) :
+        return self.max_tick-1

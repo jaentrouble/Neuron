@@ -25,7 +25,7 @@ class Soma(pygame.sprite.Sprite) :
         self.is_fired = False
 
     def potential_to_color (self, potential) :
-        color_scale = min(255, int(255*(potential+NEURON_undershoot)/NEURON_threshold))
+        color_scale = min(255, int(255*(potential-NEURON_undershoot)/NEURON_threshold))
         return (color_scale, color_scale, color_scale)
 
     def potential_update (self, potential) :
@@ -45,6 +45,7 @@ class Dendrites(pygame.sprite.Sprite) :
     """
     Dendrites
     A big transparant surface, drawing synapses as lines
+    weight_update -> fired -> update
     """
     def __init__(self, connections : list, neuron_pos_list : list, screen_size : list) :
         super().__init__(self.groups)

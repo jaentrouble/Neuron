@@ -9,18 +9,18 @@ import os
 Every Neurons and Synapses are called as their index (or ID)
 """
 #Numbers of Threads to (N)eurons and (S)ynapses
-N_N_THREAD = 2
+N_N_THREAD = 1
 N_S_THREAD = 4
 # numbers per Thread
-N_NEURON = 10
-N_SYNAPSE = 100
+N_NEURON = 100
+N_SYNAPSE = 300
 # Excitatory synapse ratio
-S_E_ratio = 0.9
+S_E_ratio = 1
 # Total simulation time
-TICKS = 10
+TICKS = 1000
 # N of neurons to give External input
-EXTERNAL_N_neuron = 2
-EXTERNAL_potential = 10
+EXTERNAL_N_neuron = 10
+EXTERNAL_potential = 20
 
 class Main_multi() :
     def __init__ (self) :
@@ -36,6 +36,7 @@ class Main_multi() :
         self.s_log_Q = Queue()
         self.n_list = []
         self.s_list = []
+        self.ext_choices = None
 
         for i in range(N_N_THREAD * N_NEURON) :
             self.n_list.append(neuron.Neuron(i))
@@ -87,8 +88,10 @@ class Main_multi() :
         n : potential list from 0 to n-1 neuron
         potential : potential to give to the neurons
         """
+        if self.ext_choices == None :
+            self.ext_choices = random.choices(range(len(self.n_list)), k=n)
         tmp = []
-        for i in range(n) :
+        for i in self.ext_choices :
             tmp.append([potential,i])
         return tmp
 
