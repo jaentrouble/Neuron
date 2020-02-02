@@ -1,7 +1,8 @@
-import neuron
-from constants import *
+from common import neuron
+from common.constants import *
 import random
 import rapidjson
+import os
 """
 Every Neurons and Synapses are called as their index (or ID)
 """
@@ -86,5 +87,5 @@ for s in s_list :
         reduced += 1
 print(reduced)
 
-with open('log.json', 'w') as logfile :
+with open(os.path.join(LOG_path,'log_single.json'), 'w') as logfile :
     rapidjson.dump(log,logfile)

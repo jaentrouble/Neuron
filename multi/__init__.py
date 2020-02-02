@@ -1,0 +1,1 @@
+import multi.thread_func

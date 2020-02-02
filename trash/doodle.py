@@ -1,21 +1,24 @@
 from multiprocessing import Process, Queue, freeze_support
 import time
 
+class sample () :
+    def __init__(self, a) :
+        self.a = a
 
 def creator(q) :
     for _ in range(5) :
         time.sleep(1)
         print('putting')
-        q.put('a')
+        t = sample([1,1])
+        q.put(t)
     q.put(-1)
 
 def consumer(q) :
     while True :
         data = q.get()
-        print(data)
-        print(1)
         if data == -1 :
             break
+        print(data.a)
 
 if __name__ == '__main__':
     freeze_support()

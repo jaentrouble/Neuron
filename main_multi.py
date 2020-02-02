@@ -1,6 +1,6 @@
-import neuron
-from constants import *
-import thread_func as tf
+from common import neuron
+from common.constants import *
+from multi import thread_func as tf
 import random
 import rapidjson
 from multiprocessing import Process, Queue, freeze_support
@@ -53,7 +53,7 @@ class Main_multi() :
                     self.n_pre_Q[i],
                     self.n_post_Q[i],
                     self.n_potential_Q[i],
-                    self.n_log_Q,
+                    i,
                 )
             ))
         for i in range(N_S_THREAD) :
@@ -67,7 +67,7 @@ class Main_multi() :
                     self.s_pre_Q[i],
                     self.s_post_Q[i],
                     self.s_potential_Q[i],
-                    self.s_log_Q,
+                    i,
                 )
             ))
     def synapse_maker(self, idx, n_list : list) :
@@ -88,7 +88,7 @@ class Main_multi() :
         """
         tmp = []
         for i in range(n) :
-            tmp.append([i,potential])
+            tmp.append([potential,i])
         return tmp
 
     def run(self) :
@@ -132,7 +132,7 @@ class Main_multi() :
                     total_post[post//N_SYNAPSE].append(post)
             for idx in range(N_S_THREAD) :
                 for n in self.s_potential_Q[idx].get() :
-                    total_potentials[n[0]//N_NEURON].append(n)
+                    total_potentials[n[1]//N_NEURON].append(n)
 
         #########################################################
         for Q in self.n_potential_Q :
@@ -141,23 +141,17 @@ class Main_multi() :
             Q.put(MULTI_sentinel)
         for Q in self.s_pre_Q :
             Q.put(MULTI_sentinel)
-        neuron_log = []
-        synapse_log = []
-        while len(neuron_log) < N_N_THREAD :
-            neuron_log.append(self.n_log_Q.get())
-        while len(synapse_log) < N_S_THREAD :
-            synapse_log.append(self.s_log_Q.get())
+        # neuron_log = []
+        # synapse_log = []
+        # while len(neuron_log) < N_N_THREAD :
+        #     neuron_log.append(self.n_log_Q.get())
+        # while len(synapse_log) < N_S_THREAD :
+        #     synapse_log.append(self.s_log_Q.get())
 
         for n_p in self.n_procs :
             n_p.join()
         for s_p in self.s_procs :
             s_p.join()
-        
-        print(len(neuron_log))
-        print(len(synapse_log))
-
-
-
 
 if __name__ == '__main__' :
     freeze_support()
