@@ -2,7 +2,9 @@ import pygame
 from viewer import log_loader
 from viewer import particles
 from common.constants import *
-from common import tools
+from common.models import viewer_pos_models as vmodel
+from common.models import experiment_model as emodel
+MODEL = emodel.random_test_1
 
 class Main() :
     """
@@ -35,12 +37,7 @@ class Main() :
 
     def neuron_creator(self) :
         self.neurons = []
-        self.neuron_pos = tools.ellipse_pos_maker(
-            int(self.width/2 - 20),
-            int(self.height/2 - 20),
-            [self.rect.centerx, self.rect.centery],
-            self.log.get_n_num(),
-        )
+        self.neuron_pos = MODEL.v_model(**MODEL.v_kwargs)
         for pos in self.neuron_pos :
             self.neurons.append(particles.Soma(pos))
 
@@ -93,4 +90,4 @@ class Main() :
 
 
 if __name__ == '__main__' :
-    Main(1,4, fps= 10, width = 600, height= 600).run()
+    Main(MODEL.N_N_THREAD, MODEL.N_S_THREAD, fps= MODEL.FPS, width = MODEL.WIDTH, height= MODEL.HEIGHT).run()

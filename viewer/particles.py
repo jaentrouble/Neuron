@@ -57,7 +57,7 @@ class Dendrites(pygame.sprite.Sprite) :
         self.s_num = len(connections)
         self.connections = connections
         self.n_pos_list = neuron_pos_list
-        self.converge_weight = (WEIGHT_g_max*SYNAPSE_decay)/(1-SYNAPSE_decay)
+        self.converge_weight = WEIGHT_max
         self.weights = np.ones(self.s_num)
         self.is_fired = np.zeros(self.s_num)
 

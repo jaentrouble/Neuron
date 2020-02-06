@@ -94,7 +94,6 @@ class Synapse() :
         self.post_neuron = post
         self.neuron_type = neuron_type
         self.weight = SYNAPSE_default_weight
-        self.g = SYNAPSE_default_g
         self.time = 0
         self.id = ID_num
         self.t_pre = 0
@@ -103,19 +102,19 @@ class Synapse() :
 
     def tick(self, ):
         self.time += 1
-        if self.neuron_type == SYNAPSE_excitatory :
-            self.weight *= SYNAPSE_decay
+        if self.neuron_type == SYNAPSE_excitatory and self.weight > SYNAPSE_decay :
+            self.weight -= SYNAPSE_decay
 
     def pre_fired(self,):
         self.t_pre = self.time
         if self.neuron_type == SYNAPSE_excitatory :
-            self.weight, self.g = tools.weight_modify(self.t_pre - self.t_post, self.weight, self.g)
+            self.weight = tools.weight_modify(self.t_pre - self.t_post, self.weight)
         self.fired = True
 
     def post_fired(self, ):
         self.t_post = self.time
         if self.neuron_type == SYNAPSE_excitatory :
-            self.weight, self.g = tools.weight_modify(self.t_pre - self.t_post, self.weight, self.g)
+            self.weight = tools.weight_modify(self.t_pre - self.t_post, self.weight)
 
     def is_fired(self,) :
         return self.fired

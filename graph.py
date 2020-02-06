@@ -4,7 +4,7 @@ import numpy as np
 import rapidjson
 import os
 
-with open(os.path.join('log','log.json'), 'r') as lf :
+with open(os.path.join('log','log_single.json'), 'r') as lf :
     log = rapidjson.load(lf)
 
 log = np.array(log)
