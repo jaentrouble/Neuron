@@ -25,15 +25,11 @@ class Main_multi() :
         self.s_potential_Q = []
         self.n_log_Q = Queue()
         self.s_log_Q = Queue()
-        self.n_list = []
-        self.s_list = []
         self.ext_choices = None
         self.s_num = MODEL.N_NUM
         self.n_num = MODEL.S_NUM
 
-        for i in range(self.n_num) :
-            self.n_list.append(neuron.Neuron(i))
-
+        self.n_list = MODEL.n_model(**MODEL.n_kwargs)
         self.s_list = MODEL.s_model(**MODEL.s_kwargs)
         self.synapse_connector()
 
@@ -121,9 +117,9 @@ class Main_multi() :
 
             for idx in range(MODEL.N_N_THREAD) :
                 for pre in self.n_pre_Q[idx].get() :
-                    total_pre[pre//MODEL.N_SYNAPSE].append(pre)
+                    total_pre[pre[1]//MODEL.N_SYNAPSE].append(pre)
                 for post in self.n_post_Q[idx].get() :
-                    total_post[post//MODEL.N_SYNAPSE].append(post)
+                    total_post[post[1]//MODEL.N_SYNAPSE].append(post)
             for idx in range(MODEL.N_S_THREAD) :
                 for n in self.s_potential_Q[idx].get() :
                     total_potentials[n[1]//MODEL.N_NEURON].append(n)

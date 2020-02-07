@@ -62,10 +62,10 @@ def synapse_init(s_list : list, pre_Q : Queue, post_Q : Queue, Potential_Q : Que
             s.tick()
 
         # 2
-        for s_index in post_fired :
-            s_list[s_index - start_index].post_fired()
-        for s_index in pre_fired :
-            s_list[s_index - start_index].pre_fired()
+        for s in post_fired :
+            s_list[s[1] - start_index].post_fired(s[0])
+        for s in pre_fired :
+            s_list[s[1] - start_index].pre_fired(s[0])
 
         # 3
         tmp_weight = []

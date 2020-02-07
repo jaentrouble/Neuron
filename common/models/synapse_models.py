@@ -1,9 +1,9 @@
-from common.neuron import Neuron, Synapse
+from common.neuron import Synapse
 import random
 from common.constants import *
 """
 functions to create synapse lists
-
+return s_list with Synapse objects
 """
 
 def random_synapses(S_num : int,N_num : int ,ex_percent : float):
@@ -17,3 +17,6 @@ def random_synapses(S_num : int,N_num : int ,ex_percent : float):
             s_list.append(Synapse(pre, post, SYNAPSE_inhibitory, idx))
 
     return s_list
+    
+def dopa_test_s_1 () :
+    pass

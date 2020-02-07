@@ -1,6 +1,7 @@
 from common.models import synapse_models as smodel
 from common.models import viewer_pos_models as vmodel
 from common.models import ext_pot_models as epmodel
+from common.models import neuron_models as nmodel
 
 """
 class CLASSNAME () :
@@ -10,7 +11,11 @@ class CLASSNAME () :
     N_SYNAPSE =
     N_NUM = N_NEURON * N_N_THREAD
     S_NUM = N_SYNAPSE * N_S_THREAD
+    
+    n_model = 
+    n_kwargs = {
 
+    }
     s_model =
     s_kwargs = {
         
@@ -45,6 +50,11 @@ class random_test_1() :
     EXTERNAL_N_neuron = 10
     EXTERNAL_potential = 20
 
+    n_model = nmodel.simple_neurons
+    n_kwargs = {
+        'N_num' : N_NUM,
+    }
+
     s_model = smodel.random_synapses
     s_kwargs = {
         'S_num' : N_S_THREAD * N_SYNAPSE,
@@ -71,28 +81,32 @@ class random_test_1() :
         'n' : N_NUM,
     }
 
-class dopa_test_1 () :
-    N_N_THREAD = 1
-    N_S_THREAD = 1
-    N_NEURON = 10+10+252+252+252+1+1
-    N_SYNAPSE = 10*252 + 252*10 + 252 + 252+252+252+252+1
-    N_NUM = N_NEURON * N_N_THREAD
-    S_NUM = N_SYNAPSE * N_S_THREAD
+# class dopa_test_1 () :
+#     N_N_THREAD = 1
+#     N_S_THREAD = 1
+#     N_NEURON = 10+10+252+252+252+1+1
+#     N_SYNAPSE = 10*252 + 252*10 + 252 + 252+252+252+252+1
+#     N_NUM = N_NEURON * N_N_THREAD
+#     S_NUM = N_SYNAPSE * N_S_THREAD
 
-    s_model =
-    s_kwargs = {
+#     n_model = nmodel.simple_neurons
+#     n_kwargs = {
+#         'N_num' = N_NUM,
+#     }
+#     s_model =
+#     s_kwargs = {
         
-    }
-    ext_model =
-    ext_kwargs = {
+#     }
+#     ext_model =
+#     ext_kwargs = {
 
-    }
-# Viewer Settings ###########################
+#     }
+# # Viewer Settings ###########################
 
-    WIDTH =
-    HEIGHT =
-    FPS =
-    v_model =
-    v_kwargs = {
+#     WIDTH =
+#     HEIGHT =
+#     FPS =
+#     v_model =
+#     v_kwargs = {
 
-    }
+#     }

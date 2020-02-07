@@ -4,6 +4,9 @@ SYNAPSE_not_fired_yet = -1
 SYNAPSE_excitatory = 1
 SYNAPSE_inhibitory = -1
 
+NT_DEFAULT = None
+NT_DOPA = 0
+
 MULTI_sentinel = -1
 MULTI_potent_log = 0
 MULTI_fired_neuron_log = 1
@@ -18,11 +21,16 @@ LOG_connection_name = 'log_connection.json'
 #modifiable-------------------------------------------
 SYNAPSE_decay = 0.001
 SYNAPSE_default_weight = 1
-# SYNAPSE_default_g = 0.005
+
+DOPA_normal = 4
+DOPA_max = 8
 
 WEIGHT_max = 3
 WEIGHT_F_max = 0.005 
 WEIGHT_t_0 = 8
+
+WEIGHT_dopa_pp = 2
+WEIGHT_dopa_pd = 2
 
 NEURON_threshold = 10
 NEURON_rest = 0

@@ -68,9 +68,16 @@ class Neuron():
         Caution : Does not check if potential is higher than threshold
         use is_fired first
         returns in-synapse list, ex-synapse list and resets potential to undershoot
+        lists contains [NT_DEFAULT, idx]
         """
         self.potential = NEURON_undershoot
-        return self.in_synapses.copy(), self.ex_synapses.copy()
+        s_in = []
+        s_ex = []
+        for s in self.in_synapses :
+            s_in.append([NT_DEFAULT,s])
+        for s in self.ex_synapses :
+            s_ex.append([NT_DEFAULT,s])
+        return s_in, s_ex
 
     def get_id(self) :
         return self.id
@@ -84,15 +91,12 @@ class Synapse() :
     Multiply weight and send to post synaptic neuron
     Will count how many ticks have passed between 
     the synaptic transmission to the post-synapse neuron firing
+    neuron_type : inhibitory or excitatory
     """
-    def __init__(self, pre , post , neuron_type : int , ID_num : int) :
-        """
-        Synapse
-        neuron_type : inhibitory or excitatory
-        """
+    def __init__(self, pre , post , ex_in_type : int , ID_num : int) :
         self.pre_neuron = pre
         self.post_neuron = post
-        self.neuron_type = neuron_type
+        self.neuron_type = ex_in_type
         self.weight = SYNAPSE_default_weight
         self.time = 0
         self.id = ID_num
@@ -105,13 +109,13 @@ class Synapse() :
         if self.neuron_type == SYNAPSE_excitatory and self.weight > SYNAPSE_decay :
             self.weight -= SYNAPSE_decay
 
-    def pre_fired(self,):
+    def pre_fired(self, arg):
         self.t_pre = self.time
         if self.neuron_type == SYNAPSE_excitatory :
             self.weight = tools.weight_modify(self.t_pre - self.t_post, self.weight)
         self.fired = True
 
-    def post_fired(self, ):
+    def post_fired(self, arg):
         self.t_post = self.time
         if self.neuron_type == SYNAPSE_excitatory :
             self.weight = tools.weight_modify(self.t_pre - self.t_post, self.weight)

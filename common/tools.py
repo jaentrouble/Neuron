@@ -5,9 +5,9 @@ def weight_modify(delta_t : int, weight) :
     """
     weight_modify
     delta_t : pre - post
-    g will not exceed gmax
-    updates weight and g
-    returns weight, g
+    weight will not exceed WEIGHT_max or get lower than 0
+    updates weight
+    returns new weight
     """
     delta_t -= 2
 
@@ -22,16 +22,35 @@ def weight_modify(delta_t : int, weight) :
         delta = ((delta_t*WEIGHT_F_max)/WEIGHT_t_0 - WEIGHT_F_max) * WEIGHT_max
         return max(weight + delta, 0)
 
-def ellipse_pos_maker(a : int, b: int, center : list, n : int) :
+def dopa_weight_modify(delta_prepost, delta_postdopa, predict, dopa_q, weight) :
     """
-    ellipse_pos_maker
-    makes n points on a ellipse(x : a, y : b, center : center)
-    positions will be in integers
+    dopa_weight_modify
+    delta_prepost : pre - post
+    delta_postdopa : post - dopa
+    predict : the time dopa should take to arrive
+    dopa_q : quantity of dopamine
     """
-    pos = []
-    for i in range(n) :
-        pos.append([
-            int(center[0] + a*math.cos(i*2*math.pi/n)),
-            int(center[1] + b*math.sin(i*2*math.pi/n)),
-        ])
-    return pos
+    delta_prepost -= 2
+    delta_postdopa -= predict
+
+    if (
+        delta_prepost <= -WEIGHT_t_0 or
+        delta_prepost >= WEIGHT_t_0 or
+        delta_postdopa <= -WEIGHT_t_0 or
+        delta_postdopa >= WEIGHT_t_0
+    ):
+        return weight + SYNAPSE_decay
+    else :
+        dopa = dopa_q - DOPA_normal
+        if delta_prepost < 0 :
+            delta_prepost = WEIGHT_dopa_pp + (delta_prepost*WEIGHT_dopa_pp)/WEIGHT_t_0
+        elif delta_prepost >= 0 :
+            delta_prepost = -WEIGHT_dopa_pp + (delta_prepost*WEIGHT_dopa_pp)/WEIGHT_t_0
+        
+        if delta_postdopa < 0 :
+            delta_postdopa = WEIGHT_dopa_pp + (delta_postdopa*WEIGHT_dopa_pp)/WEIGHT_t_0
+        elif delta_postdopa >= 0 :
+            delta_postdopa = -WEIGHT_dopa_pp + (delta_postdopa*WEIGHT_dopa_pp)/WEIGHT_t_0
+        
+        delta_weight = delta_prepost * delta_postdopa * WEIGHT_F_max * WEIGHT_max * dopa/DOPA_normal
+        return weight + delta_weight + SYNAPSE_decay
