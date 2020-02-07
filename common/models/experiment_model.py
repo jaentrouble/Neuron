@@ -70,3 +70,29 @@ class random_test_1() :
         'center' : [WIDTH/2, HEIGHT/2],
         'n' : N_NUM,
     }
+
+class dopa_test_1 () :
+    N_N_THREAD = 1
+    N_S_THREAD = 1
+    N_NEURON = 10+10+252+252+252+1+1
+    N_SYNAPSE = 10*252 + 252*10 + 252 + 252+252+252+252+1
+    N_NUM = N_NEURON * N_N_THREAD
+    S_NUM = N_SYNAPSE * N_S_THREAD
+
+    s_model =
+    s_kwargs = {
+        
+    }
+    ext_model =
+    ext_kwargs = {
+
+    }
+# Viewer Settings ###########################
+
+    WIDTH =
+    HEIGHT =
+    FPS =
+    v_model =
+    v_kwargs = {
+
+    }
