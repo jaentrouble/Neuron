@@ -55,3 +55,11 @@ class S_Dopa_pre_only(S_Dopa_dependent) :
             amount,
             self.weight,
         )
+
+class S_non_decaying(Synapse) :
+    """
+    S_non-decaying
+    Simple synapse, but not decaying
+    """
+    def tick(self) :
+        self.time += 1

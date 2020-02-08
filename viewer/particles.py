@@ -77,14 +77,22 @@ class Dendrites(pygame.sprite.Sprite) :
     def update(self) :
         for idx, con in enumerate(self.connections) :
             if self.is_fired[idx]:
-                for pre in con[0] :
+                for pre in con[0][:-1] :
                     pygame.draw.line(
                         self.image,
-                        VIEWER_fired_color,
+                        self.weight_to_color(self.weights[idx]),
                         self.n_pos_list[pre],
                         self.n_pos_list[con[1]],
                         VIEWER_dendrite_thick,
                     )
+                pygame.draw.line(
+                    self.image,
+                    VIEWER_fired_color,
+                    self.n_pos_list[con[0][-1]],
+                    self.n_pos_list[con[1]],
+                    VIEWER_dendrite_thick,
+                )
+                # only the main connection will be colored
             else :
                 for pre in con[0] :
                     pygame.draw.line(

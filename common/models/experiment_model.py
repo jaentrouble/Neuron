@@ -93,9 +93,9 @@ class dopa_test_1 () :
     rwrd_limit = 3
 
     N_N_THREAD = 1
-    N_S_THREAD = 3
+    N_S_THREAD = 1
     N_NEURON = 1000
-    N_SYNAPSE = 4000
+    N_SYNAPSE = 3000
     cmbi_start = inpt_n
     outpt_start = cmbi_start + tools.combi(inpt_n, combi_r)
     val_start = outpt_start + outpt
@@ -135,7 +135,7 @@ class dopa_test_1 () :
 
     WIDTH = 1000
     HEIGHT = 800
-    FPS = 10
+    FPS = 60
     v_model = vmodel.dopa_test_v_1
     v_kwargs = {
         'cmbi_start' : cmbi_start, 

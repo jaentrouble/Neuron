@@ -107,8 +107,10 @@ class Synapse() :
 
     def tick(self, ):
         self.time += 1
-        if self.neuron_type == SYNAPSE_excitatory and self.weight > SYNAPSE_decay :
+        if self.weight > SYNAPSE_decay :
             self.weight -= SYNAPSE_decay
+        else : 
+            self.weight = 0
 
     def pre_fired(self, arg):
         self.t_pre = self.time
@@ -135,4 +137,8 @@ class Synapse() :
         return self.id
 
     def get_connection(self) :
+        """
+        get_connection
+        the 'main' connection (which will be yellow when fired) should be in the last of pre-neuron
+        """
         return [[self.pre_neuron], self.post_neuron]

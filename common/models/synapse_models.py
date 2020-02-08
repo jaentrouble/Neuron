@@ -32,7 +32,7 @@ def dopa_test_s_1 (inpt_n, combi_r, outpt, v_n, dopa, reward) :
     reward_start = dopa_start + dopa
     # 1
     combi = list(it.combinations(range(inpt_n), combi_r))
-    for post_idx, c in enumerate(combi) :
+    for post_idx, c in enumerate(combi, cmbi_start) :
         for pre_idx in c :
             s_list.append(S_Dopa_dependent(
                 pre_idx,
@@ -72,15 +72,15 @@ def dopa_test_s_1 (inpt_n, combi_r, outpt, v_n, dopa, reward) :
             idx += 1
     # 5
     for pre_idx in range(val_start,gaba_start) :
-        for post_idx in range(gaba_start, dopa_start) :
-            for _ in range(math.ceil(NEURON_threshold/SYNAPSE_default_weight)):
-                s_list.append(Synapse(
-                    pre_idx,
-                    post_idx,
-                    SYNAPSE_excitatory,
-                    idx,
-                ))
-                idx += 1
+        post_idx = pre_idx + gaba_start - val_start
+        for _ in range(math.ceil(NEURON_threshold/SYNAPSE_default_weight)+1):
+            s_list.append(S_non_decaying(
+                pre_idx,
+                post_idx,
+                SYNAPSE_excitatory,
+                idx,
+            ))
+            idx += 1
     # 6
     for pre_idx in range(gaba_start, dopa_start) :
         for post_idx in range(dopa_start, reward_start):
@@ -96,7 +96,7 @@ def dopa_test_s_1 (inpt_n, combi_r, outpt, v_n, dopa, reward) :
     # 7
     for pre_idx in range(reward_start, reward_start+reward) :
         for post_idx in range(dopa_start, reward_start):
-            s_list.append(Synapse(
+            s_list.append(S_non_decaying(
                 pre_idx,
                 post_idx,
                 SYNAPSE_excitatory,
