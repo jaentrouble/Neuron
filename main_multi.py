@@ -1,4 +1,3 @@
-from common import neuron
 from common.constants import *
 from multi import thread_func as tf
 import random
@@ -9,7 +8,7 @@ from common.models import experiment_model as emodel
 """
 Every Neurons and Synapses are called as their index (or ID)
 """
-MODEL = emodel.random_test_1
+MODEL = emodel.dopa_test_1
 
 TICKS = 1000
 
@@ -26,11 +25,11 @@ class Main_multi() :
         self.n_log_Q = Queue()
         self.s_log_Q = Queue()
         self.ext_choices = None
-        self.s_num = MODEL.N_NUM
-        self.n_num = MODEL.S_NUM
 
         self.n_list = MODEL.n_model(**MODEL.n_kwargs)
         self.s_list = MODEL.s_model(**MODEL.s_kwargs)
+        print('neuron : ',len(self.n_list))
+        print('synapse :',len(self.s_list))
         self.synapse_connector()
 
         for i in range(MODEL.N_N_THREAD) :
@@ -66,7 +65,8 @@ class Main_multi() :
         for s in self.s_list :
             con = s.get_connection()
             idx = s.get_id()
-            self.n_list[con[0]].connect_ex_one(idx)
+            for pre in con[0] :
+                self.n_list[pre].connect_ex_one(idx)
             self.n_list[con[1]].connect_in_one(idx)
 
     def connection_logging(self) :

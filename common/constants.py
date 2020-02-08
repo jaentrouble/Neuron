@@ -33,9 +33,9 @@ WEIGHT_dopa_pp = 2
 WEIGHT_dopa_pd = 2
 WEIGHT_dopa_constant = 1
 
-NEURON_threshold = 10
+NEURON_threshold = 5
 NEURON_rest = 0
-NEURON_undershoot = -2
+NEURON_undershoot = -1
 NEURON_decay = 1
 
 VIEWER_soma_size = 5

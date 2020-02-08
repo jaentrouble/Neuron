@@ -77,18 +77,20 @@ class Dendrites(pygame.sprite.Sprite) :
     def update(self) :
         for idx, con in enumerate(self.connections) :
             if self.is_fired[idx]:
-                pygame.draw.line(
-                    self.image,
-                    VIEWER_fired_color,
-                    self.n_pos_list[con[0]],
-                    self.n_pos_list[con[1]],
-                    VIEWER_dendrite_thick,
-                )
+                for pre in con[0] :
+                    pygame.draw.line(
+                        self.image,
+                        VIEWER_fired_color,
+                        self.n_pos_list[pre],
+                        self.n_pos_list[con[1]],
+                        VIEWER_dendrite_thick,
+                    )
             else :
-                pygame.draw.line(
-                    self.image,
-                    self.weight_to_color(self.weights[idx]),
-                    self.n_pos_list[con[0]],
-                    self.n_pos_list[con[1]],
-                    VIEWER_dendrite_thick,
-                )
+                for pre in con[0] :
+                    pygame.draw.line(
+                        self.image,
+                        self.weight_to_color(self.weights[idx]),
+                        self.n_pos_list[pre],
+                        self.n_pos_list[con[1]],
+                        VIEWER_dendrite_thick,
+                    )

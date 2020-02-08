@@ -92,6 +92,7 @@ class Synapse() :
     Will count how many ticks have passed between 
     the synaptic transmission to the post-synapse neuron firing
     neuron_type : inhibitory or excitatory
+    many can come in, but only one output is allowed
     """
     def __init__(self, pre , post , ex_in_type : int , ID_num : int) :
         self.pre_neuron = pre
@@ -134,4 +135,4 @@ class Synapse() :
         return self.id
 
     def get_connection(self) :
-        return [self.pre_neuron, self.post_neuron]
+        return [[self.pre_neuron], self.post_neuron]

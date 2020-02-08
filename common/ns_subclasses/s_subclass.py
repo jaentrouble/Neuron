@@ -11,10 +11,11 @@ class S_Dopa_dependent(Synapse) :
     Dopa should be handed over as
     [NT_DOPA, amount] through 'arg' parameter of 'pre-fired' method
     """
-    def __init__(self, pre, post, predict, ID_num : int):
-        super().__init__(pre, post, SYNAPSE_excitatory, ID_num)
+    def __init__(self, pre, post, ex_in_type, dopa_neurons : list, predict, ID_num : int):
+        super().__init__(pre, post, ex_in_type, ID_num)
         self.t_dopa = 0
         self.predict = predict
+        self.dopa_neurons = dopa_neurons
 
     def pre_fired(self, arg) :
         if arg == NT_DEFAULT :
@@ -24,6 +25,9 @@ class S_Dopa_dependent(Synapse) :
             if arg[0] == NT_DOPA :
                 self.dopa_passed(arg[1])
 
+    def post_fired(self, arg) :
+        self.t_post = self.time
+
     def dopa_passed(self, amount) :
         self.weight = tools.dopa_weight_modify(
             self.t_pre - self.t_post,
@@ -31,4 +35,23 @@ class S_Dopa_dependent(Synapse) :
             self.predict,
             amount,
             self.weight
+        )
+
+    def get_connection(self) :
+        pre = self.dopa_neurons.copy()
+        pre.append(self.pre_neuron)
+        return [pre, self.post_neuron]
+
+class S_Dopa_pre_only(S_Dopa_dependent) :
+    """
+    Same as S_Dopa_dependent,
+    just this doesn't care post synaptic fire
+    """
+    def dopa_passed(self, amount) :
+        self.weight = tools.dopa_weight_modify(
+            1,
+            self.t_pre - self.t_dopa - 2,
+            self.predict,
+            amount,
+            self.weight,
         )

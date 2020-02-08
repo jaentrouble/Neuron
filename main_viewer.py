@@ -4,7 +4,7 @@ from viewer import particles
 from common.constants import *
 from common.models import viewer_pos_models as vmodel
 from common.models import experiment_model as emodel
-MODEL = emodel.random_test_1
+MODEL = emodel.dopa_test_1
 
 class Main() :
     """
@@ -38,6 +38,7 @@ class Main() :
     def neuron_creator(self) :
         self.neurons = []
         self.neuron_pos = MODEL.v_model(**MODEL.v_kwargs)
+        print(len(self.neuron_pos))
         for pos in self.neuron_pos :
             self.neurons.append(particles.Soma(pos))
 

@@ -1,5 +1,6 @@
 from common.constants import *
 import math
+import numpy as np
 
 def weight_modify(delta_t : int, weight) :
     """
@@ -39,7 +40,7 @@ def dopa_weight_modify(delta_prepost, delta_postdopa, predict, dopa_q, weight) :
         delta_postdopa <= -WEIGHT_t_0 or
         delta_postdopa >= WEIGHT_t_0
     ):
-        return weight + SYNAPSE_decay
+        return max(weight + SYNAPSE_decay, 0)
     else :
         dopa = dopa_q - DOPA_normal
         if delta_prepost < 0 :
@@ -52,11 +53,27 @@ def dopa_weight_modify(delta_prepost, delta_postdopa, predict, dopa_q, weight) :
         elif delta_postdopa >= 0 :
             delta_postdopa = -WEIGHT_dopa_pp + (delta_postdopa*WEIGHT_dopa_pp)/WEIGHT_t_0
         
-        delta_weight = delta_prepost * delta_postdopa * WEIGHT_F_max * WEIGHT_max * dopa/DOPA_normal
-        return weight + delta_weight + SYNAPSE_decay
+        if delta_prepost < 0 and delta_postdopa < 0 :
+            sign = -1
+        else :
+            sign = 1
+        
+        delta_weight = delta_prepost * delta_postdopa * WEIGHT_F_max * WEIGHT_max * dopa/DOPA_normal * sign
+        return max(weight + delta_weight + SYNAPSE_decay, 0)
 
 def combi(n, k) :
     if k> n :
         return 0
     else :
         return int(math.factorial(n)/(math.factorial(k) * math.factorial(n-k)))
+
+def split(lst, n) :
+    smallstep = len(lst)//n
+    leftover = len(lst) % n
+    div = [smallstep+1 if i<leftover else smallstep for i in range(n)]
+    idx = 0
+    chunks = []
+    for step in div :
+        chunks.append(lst[idx:idx+step])
+        idx += step
+    return chunks

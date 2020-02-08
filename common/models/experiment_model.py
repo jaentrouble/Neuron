@@ -2,6 +2,8 @@ from common.models import synapse_models as smodel
 from common.models import viewer_pos_models as vmodel
 from common.models import ext_pot_models as epmodel
 from common.models import neuron_models as nmodel
+from common import tools
+from common.constants import *
 
 """
 class CLASSNAME () :
@@ -9,8 +11,6 @@ class CLASSNAME () :
     N_S_THREAD =
     N_NEURON =
     N_SYNAPSE =
-    N_NUM = N_NEURON * N_N_THREAD
-    S_NUM = N_SYNAPSE * N_S_THREAD
     
     n_model = 
     n_kwargs = {
@@ -24,7 +24,7 @@ class CLASSNAME () :
     ext_kwargs = {
 
     }
-# Viewer Settings ###########################
+    # Viewer Settings ###########################
 
     WIDTH =
     HEIGHT =
@@ -57,7 +57,7 @@ class random_test_1() :
 
     s_model = smodel.random_synapses
     s_kwargs = {
-        'S_num' : N_S_THREAD * N_SYNAPSE,
+        'S_num' : S_NUM,
         'ex_percent' : S_E_percent,
         'N_num' : N_NUM
     }
@@ -69,7 +69,7 @@ class random_test_1() :
         'potential' : EXTERNAL_potential,
     }
 
-# Viewer Settings ###########################
+    # Viewer Settings ###########################
     WIDTH = 1000
     HEIGHT = 800
     FPS = 10
@@ -81,32 +81,70 @@ class random_test_1() :
         'n' : N_NUM,
     }
 
-# class dopa_test_1 () :
-#     N_N_THREAD = 1
-#     N_S_THREAD = 1
-#     N_NEURON = 10+10+252+252+252+1+1
-#     N_SYNAPSE = 10*252 + 252*10 + 252 + 252+252+252+252+1
-#     N_NUM = N_NEURON * N_N_THREAD
-#     S_NUM = N_SYNAPSE * N_S_THREAD
+class dopa_test_1 () :
+    inpt_n = 10
+    combi_r = 5
+    outpt = 9
+    v_n = 36
+    dopa = 1
+    reward = 1
 
-#     n_model = nmodel.simple_neurons
-#     n_kwargs = {
-#         'N_num' = N_NUM,
-#     }
-#     s_model =
-#     s_kwargs = {
-        
-#     }
-#     ext_model =
-#     ext_kwargs = {
+    inpt_pot_n = 5
+    rwrd_limit = 3
 
-#     }
-# # Viewer Settings ###########################
+    N_N_THREAD = 1
+    N_S_THREAD = 3
+    N_NEURON = 1000
+    N_SYNAPSE = 4000
+    cmbi_start = inpt_n
+    outpt_start = cmbi_start + tools.combi(inpt_n, combi_r)
+    val_start = outpt_start + outpt
+    gaba_start = val_start + v_n
+    dopa_start = gaba_start + v_n
+    reward_start = dopa_start + dopa
 
-#     WIDTH =
-#     HEIGHT =
-#     FPS =
-#     v_model =
-#     v_kwargs = {
+    n_model = nmodel.dopa_test_n_1
+    n_kwargs = {
+        'inpt_n' : inpt_n,
+        'combi_r' : combi_r,
+        'outpt' : outpt,
+        'v_n' : v_n,
+        'dopa' : dopa,
+        'reward' : reward,
+    }
+    s_model = smodel.dopa_test_s_1
+    s_kwargs = {
+        'inpt_n' : inpt_n,
+        'combi_r' : combi_r,
+        'outpt' : outpt,
+        'v_n' : v_n,
+        'dopa' : dopa,
+        'reward' : reward,
+    }
+    ext_model = epmodel.dopa_test_e_1
+    ext_kwargs = {
+        'inpt_strt' : 0,
+        'inpt_next_strt' : inpt_n,
+        'n' : inpt_pot_n,
+        'rwrd_limit' : rwrd_limit,
+        'rwrd_strt' : reward_start,
+        'rwrd_next_strt' : reward_start + reward,
+        'potential' : NEURON_threshold + 1
+    }
+    # Viewer Settings ###########################
 
-#     }
+    WIDTH = 1000
+    HEIGHT = 800
+    FPS = 10
+    v_model = vmodel.dopa_test_v_1
+    v_kwargs = {
+        'cmbi_start' : cmbi_start, 
+        'outpt_start' : outpt_start, 
+        'val_start' : val_start, 
+        'gaba_start' : gaba_start, 
+        'dopa_start' : dopa_start, 
+        'reward_start' : reward_start, 
+        'reward' : reward, 
+        'width' : WIDTH, 
+        'height' : HEIGHT,
+    }
