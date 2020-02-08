@@ -1,4 +1,4 @@
-from common.neuron import Synapse
+from common.ns_subclasses import *
 import random
 from common.constants import *
 """

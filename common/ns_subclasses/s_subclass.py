@@ -1,4 +1,4 @@
-from common.neuron import Synapse
+from common.ns_subclasses.neuron import Synapse
 from common.constants import *
 from common import tools
 
@@ -9,11 +9,12 @@ class S_Dopa_dependent(Synapse) :
     Pre - Post -Target time passed-> Dopa
     it will decade too, so constant DOPA is needed
     Dopa should be handed over as
-    [NT_DOPA, amount] through 'arg' of pre-fired
+    [NT_DOPA, amount] through 'arg' parameter of 'pre-fired' method
     """
     def __init__(self, pre, post, predict, ID_num : int):
         super().__init__(pre, post, SYNAPSE_excitatory, ID_num)
         self.t_dopa = 0
+        self.predict = predict
 
     def pre_fired(self, arg) :
         if arg == NT_DEFAULT :
@@ -21,6 +22,13 @@ class S_Dopa_dependent(Synapse) :
             self.fired = True
         elif isinstance(arg, list) :
             if arg[0] == NT_DOPA :
-                pass
+                self.dopa_passed(arg[1])
 
     def dopa_passed(self, amount) :
+        self.weight = tools.dopa_weight_modify(
+            self.t_pre - self.t_post,
+            self.t_post - self.t_dopa,
+            self.predict,
+            amount,
+            self.weight
+        )

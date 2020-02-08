@@ -31,6 +31,7 @@ WEIGHT_t_0 = 8
 
 WEIGHT_dopa_pp = 2
 WEIGHT_dopa_pd = 2
+WEIGHT_dopa_constant = 1
 
 NEURON_threshold = 10
 NEURON_rest = 0

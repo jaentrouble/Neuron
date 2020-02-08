@@ -54,3 +54,9 @@ def dopa_weight_modify(delta_prepost, delta_postdopa, predict, dopa_q, weight) :
         
         delta_weight = delta_prepost * delta_postdopa * WEIGHT_F_max * WEIGHT_max * dopa/DOPA_normal
         return weight + delta_weight + SYNAPSE_decay
+
+def combi(n, k) :
+    if k> n :
+        return 0
+    else :
+        return int(math.factorial(n)/(math.factorial(k) * math.factorial(n-k)))
