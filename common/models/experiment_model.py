@@ -41,7 +41,7 @@ class random_test_1() :
     N_S_THREAD = 4
     # numbers per Thread
     N_NEURON = 100
-    N_SYNAPSE = 300
+    N_SYNAPSE = 1500
     N_NUM = N_NEURON * N_N_THREAD
     S_NUM = N_SYNAPSE * N_S_THREAD
     # Excitatory synapse percentage
@@ -72,7 +72,7 @@ class random_test_1() :
     # Viewer Settings ###########################
     WIDTH = 1000
     HEIGHT = 800
-    FPS = 10
+    FPS = 30
     v_model = vmodel.ellipse_pos_maker
     v_kwargs = {
         'a' : int(WIDTH/2 - 20),
@@ -85,17 +85,17 @@ class dopa_test_1 () :
     inpt_n = 10
     combi_r = 5
     outpt = 9
-    v_n = 36
+    v_n = 63
     dopa = 1
     reward = 1
 
     inpt_pot_n = 5
-    rwrd_limit = 3
+    rwrd_limit = 2
 
-    N_N_THREAD = 1
-    N_S_THREAD = 1
-    N_NEURON = 1000
-    N_SYNAPSE = 3000
+    N_N_THREAD = 2
+    N_S_THREAD = 4
+    N_NEURON = 200
+    N_SYNAPSE = 600
     cmbi_start = inpt_n
     outpt_start = cmbi_start + tools.combi(inpt_n, combi_r)
     val_start = outpt_start + outpt
@@ -135,7 +135,7 @@ class dopa_test_1 () :
 
     WIDTH = 1000
     HEIGHT = 800
-    FPS = 60
+    FPS = 16
     v_model = vmodel.dopa_test_v_1
     v_kwargs = {
         'cmbi_start' : cmbi_start, 

@@ -94,11 +94,11 @@ class Synapse() :
     neuron_type : inhibitory or excitatory
     many can come in, but only one output is allowed
     """
-    def __init__(self, pre , post , ex_in_type : int , ID_num : int) :
+    def __init__(self, pre , post , ex_in_type : int , ID_num : int, init_weight = SYNAPSE_default_weight) :
         self.pre_neuron = pre
         self.post_neuron = post
         self.neuron_type = ex_in_type
-        self.weight = SYNAPSE_default_weight
+        self.weight = init_weight
         self.time = 0
         self.id = ID_num
         self.t_pre = 0

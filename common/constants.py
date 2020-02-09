@@ -24,19 +24,21 @@ SYNAPSE_default_weight = 1
 
 DOPA_normal = 4
 DOPA_max = 8
+DOPA_decay = 0.5
 
 WEIGHT_max = 3
-WEIGHT_F_max = 0.005 
+WEIGHT_F_max = 0.02
 WEIGHT_t_0 = 8
 
 WEIGHT_dopa_pp = 2
 WEIGHT_dopa_pd = 2
 WEIGHT_dopa_constant = 1
+WEIGHT_dopa_in_ex_ratio = 1.1
 
-NEURON_threshold = 5
+NEURON_threshold = 3
 NEURON_rest = 0
 NEURON_undershoot = -1
-NEURON_decay = 1
+NEURON_decay = 0.3
 
 VIEWER_soma_size = 5
 VIEWER_fired_color = (255,255,0)

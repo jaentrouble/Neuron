@@ -10,12 +10,13 @@ class S_Dopa_dependent(Synapse) :
     it will decade too, so constant DOPA is needed
     Dopa should be handed over as
     [NT_DOPA, amount] through 'arg' parameter of 'pre-fired' method
+    will return discounted weight to the next neuron
     """
-    def __init__(self, pre, post, ex_in_type, dopa_neurons : list, predict, ID_num : int):
-        super().__init__(pre, post, ex_in_type, ID_num)
+    def __init__(self, pre, post, ex_in_type, dopa_neurons : list, ID_num : int, discount = 1, init_weight = SYNAPSE_default_weight):
+        super().__init__(pre, post, ex_in_type, ID_num, init_weight = init_weight)
         self.t_dopa = 0
-        self.predict = predict
         self.dopa_neurons = dopa_neurons
+        self.discount = discount
 
     def pre_fired(self, arg) :
         if arg == NT_DEFAULT :
@@ -29,18 +30,24 @@ class S_Dopa_dependent(Synapse) :
         self.t_post = self.time
 
     def dopa_passed(self, amount) :
+        self.t_dopa = self.time
         self.weight = tools.dopa_weight_modify(
             self.t_pre - self.t_post,
             self.t_post - self.t_dopa,
-            self.predict,
             amount,
             self.weight
         )
+
 
     def get_connection(self) :
         pre = self.dopa_neurons.copy()
         pre.append(self.pre_neuron)
         return [pre, self.post_neuron]
+
+    def get_signal(self):
+        wt = list(super().get_signal())
+        wt[0] *= self.discount
+        return wt
 
 class S_Dopa_pre_only(S_Dopa_dependent) :
     """
@@ -48,10 +55,10 @@ class S_Dopa_pre_only(S_Dopa_dependent) :
     just this doesn't care post synaptic fire
     """
     def dopa_passed(self, amount) :
+        self.t_dopa = self.time
         self.weight = tools.dopa_weight_modify(
-            1,
-            self.t_pre - self.t_dopa - 2,
-            self.predict,
+            -2,
+            self.t_pre - self.t_dopa,
             amount,
             self.weight,
         )

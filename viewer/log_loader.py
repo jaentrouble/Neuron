@@ -54,6 +54,12 @@ class Log() :
         self.s_num = len(self.connections)
         self.max_tick = len(self.merged_potent)
 
+    def get_total_pot_log(self) :
+        return self.merged_potent.copy()
+    
+    def get_total_wt_log(self) :
+        return self.merged_weight.copy()
+
     def get_log(self, tick : int) :
         """
         get_log

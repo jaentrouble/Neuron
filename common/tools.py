@@ -10,12 +10,13 @@ def weight_modify(delta_t : int, weight) :
     updates weight
     returns new weight
     """
-    delta_t -= 2
+    delta_t += 1
 
     if delta_t <= -WEIGHT_t_0 or delta_t >= WEIGHT_t_0:
         return weight
     
     elif delta_t < 0 :
+        # delta_t += 1
         delta = (WEIGHT_F_max + (delta_t*WEIGHT_F_max)/WEIGHT_t_0) * WEIGHT_max
         return min(weight + delta, WEIGHT_max)
 
@@ -23,7 +24,7 @@ def weight_modify(delta_t : int, weight) :
         delta = ((delta_t*WEIGHT_F_max)/WEIGHT_t_0 - WEIGHT_F_max) * WEIGHT_max
         return max(weight + delta, 0)
 
-def dopa_weight_modify(delta_prepost, delta_postdopa, predict, dopa_q, weight) :
+def dopa_weight_modify(delta_prepost, delta_postdopa, dopa_q, weight) :
     """
     dopa_weight_modify
     delta_prepost : pre - post
@@ -31,35 +32,30 @@ def dopa_weight_modify(delta_prepost, delta_postdopa, predict, dopa_q, weight) :
     predict : the time dopa should take to arrive
     dopa_q : quantity of dopamine
     """
-    delta_prepost -= 2
-    delta_postdopa -= predict
+    delta_prepost += 1
+    delta_firedopa = delta_postdopa + max(delta_prepost, 0)
 
     if (
         delta_prepost <= -WEIGHT_t_0 or
         delta_prepost >= WEIGHT_t_0 or
-        delta_postdopa <= -WEIGHT_t_0 or
-        delta_postdopa >= WEIGHT_t_0
+        delta_firedopa <= -WEIGHT_t_0 or
+        delta_firedopa >= 0
     ):
-        return max(weight + SYNAPSE_decay, 0)
+        return min(max(weight + SYNAPSE_decay, 0), WEIGHT_max)
+        # return max(weight, 0)
+
     else :
         dopa = dopa_q - DOPA_normal
         if delta_prepost < 0 :
-            delta_prepost = WEIGHT_dopa_pp + (delta_prepost*WEIGHT_dopa_pp)/WEIGHT_t_0
+            weight_delta_pp = WEIGHT_dopa_pp + (delta_prepost*WEIGHT_dopa_pp)/WEIGHT_t_0
         elif delta_prepost >= 0 :
-            delta_prepost = -WEIGHT_dopa_pp + (delta_prepost*WEIGHT_dopa_pp)/WEIGHT_t_0
+            weight_delta_pp = -WEIGHT_dopa_pp + (delta_prepost*WEIGHT_dopa_pp)/WEIGHT_t_0
+            weight_delta_pp *= WEIGHT_dopa_in_ex_ratio
         
-        if delta_postdopa < 0 :
-            delta_postdopa = WEIGHT_dopa_pp + (delta_postdopa*WEIGHT_dopa_pp)/WEIGHT_t_0
-        elif delta_postdopa >= 0 :
-            delta_postdopa = -WEIGHT_dopa_pp + (delta_postdopa*WEIGHT_dopa_pp)/WEIGHT_t_0
+        weight_delta_pd = WEIGHT_dopa_pd + (delta_firedopa*WEIGHT_dopa_pd)/WEIGHT_t_0
         
-        if delta_prepost < 0 and delta_postdopa < 0 :
-            sign = -1
-        else :
-            sign = 1
-        
-        delta_weight = delta_prepost * delta_postdopa * WEIGHT_F_max * WEIGHT_max * dopa/DOPA_normal * sign
-        return max(weight + delta_weight + SYNAPSE_decay, 0)
+        delta_weight = weight_delta_pp * weight_delta_pd * WEIGHT_F_max * WEIGHT_max * dopa/DOPA_normal
+        return min(max(weight + delta_weight + SYNAPSE_decay, 0), WEIGHT_max)
 
 def combi(n, k) :
     if k> n :

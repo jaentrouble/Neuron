@@ -39,7 +39,6 @@ def dopa_test_s_1 (inpt_n, combi_r, outpt, v_n, dopa, reward) :
                 post_idx,
                 SYNAPSE_excitatory,
                 list(range(dopa_start, reward_start)),
-                8,
                 idx,
             ))
             idx += 1
@@ -51,10 +50,11 @@ def dopa_test_s_1 (inpt_n, combi_r, outpt, v_n, dopa, reward) :
     # 3
     for post_idx, chunk in enumerate(tools.split(list(range(cmbi_start, outpt_start)), v_n), val_start):
         for pre_idx in chunk :
-            s_list.append(Synapse(
+            s_list.append(S_Dopa_dependent(
                 pre_idx,
                 post_idx,
                 SYNAPSE_excitatory,
+                list(range(dopa_start, reward_start)),
                 idx,
             ))
             idx += 1
@@ -66,8 +66,9 @@ def dopa_test_s_1 (inpt_n, combi_r, outpt, v_n, dopa, reward) :
                 post_idx,
                 SYNAPSE_excitatory,
                 list(range(dopa_start,reward_start)),
-                4,
                 idx,
+                discount= 0.9,
+                init_weight= 0,
             ))
             idx += 1
     # 5
@@ -89,8 +90,8 @@ def dopa_test_s_1 (inpt_n, combi_r, outpt, v_n, dopa, reward) :
                 post_idx,
                 SYNAPSE_inhibitory,
                 list(range(dopa_start,reward_start)),
-                2,
                 idx,
+                init_weight= 0,
             ))
             idx += 1
     # 7
