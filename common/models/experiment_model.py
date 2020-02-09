@@ -90,16 +90,17 @@ class dopa_test_1 () :
     reward = 1
 
     inpt_pot_n = 5
-    rwrd_limit = 2
+    rwrd_limit = 3
 
     N_N_THREAD = 2
     N_S_THREAD = 4
-    N_NEURON = 200
+    N_NEURON = 250
     N_SYNAPSE = 600
     cmbi_start = inpt_n
     outpt_start = cmbi_start + tools.combi(inpt_n, combi_r)
     val_start = outpt_start + outpt
-    gaba_start = val_start + v_n
+    relay_start = val_start + v_n
+    gaba_start = relay_start + v_n
     dopa_start = gaba_start + v_n
     reward_start = dopa_start + dopa
 
@@ -135,12 +136,13 @@ class dopa_test_1 () :
 
     WIDTH = 1000
     HEIGHT = 800
-    FPS = 16
+    FPS = 60
     v_model = vmodel.dopa_test_v_1
     v_kwargs = {
         'cmbi_start' : cmbi_start, 
         'outpt_start' : outpt_start, 
         'val_start' : val_start, 
+        'relay_start' : relay_start,
         'gaba_start' : gaba_start, 
         'dopa_start' : dopa_start, 
         'reward_start' : reward_start, 

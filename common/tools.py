@@ -33,6 +33,7 @@ def dopa_weight_modify(delta_prepost, delta_postdopa, dopa_q, weight) :
     dopa_q : quantity of dopamine
     """
     delta_prepost += 1
+    delta_postdopa -= 1
     delta_firedopa = delta_postdopa + max(delta_prepost, 0)
 
     if (
@@ -41,8 +42,8 @@ def dopa_weight_modify(delta_prepost, delta_postdopa, dopa_q, weight) :
         delta_firedopa <= -WEIGHT_t_0 or
         delta_firedopa >= 0
     ):
-        return min(max(weight + SYNAPSE_decay, 0), WEIGHT_max)
-        # return max(weight, 0)
+        # return min(max(weight + SYNAPSE_decay, 0), WEIGHT_max)
+        return max(weight, 0)
 
     else :
         dopa = dopa_q - DOPA_normal

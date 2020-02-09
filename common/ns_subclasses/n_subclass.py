@@ -34,3 +34,26 @@ class N_Dopa_emit(Neuron) :
             ])
         self.potential = NEURON_rest
         return s_in, s_ex
+
+class N_AND_gate(Neuron) :
+    """
+    N_AND_gate
+    If any potential comes in, it fires
+    """
+    def __init__(self, ID_num : int) :
+        super().__init__(ID_num)
+        self.fired = False
+
+    def input_potential(self, potential) :
+        self.fired = True
+
+    def is_fired(self) :
+        return self.fired
+
+    def get_signal(self) :
+        """
+        get_signal
+        Note that this neuron is an AND gate
+        """
+        self.fired = False
+        return super().get_signal()

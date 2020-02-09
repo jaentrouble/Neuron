@@ -19,15 +19,14 @@ LOG_multi_synapse_name = 'log_synapse_thread_{}.json'
 LOG_connection_name = 'log_connection.json'
 
 #modifiable-------------------------------------------
-SYNAPSE_decay = 0.001
+SYNAPSE_decay = 0.0001
 SYNAPSE_default_weight = 1
 
 DOPA_normal = 4
 DOPA_max = 8
-DOPA_decay = 0.5
 
 WEIGHT_max = 3
-WEIGHT_F_max = 0.02
+WEIGHT_F_max = 0.01
 WEIGHT_t_0 = 8
 
 WEIGHT_dopa_pp = 2
@@ -35,7 +34,7 @@ WEIGHT_dopa_pd = 2
 WEIGHT_dopa_constant = 1
 WEIGHT_dopa_in_ex_ratio = 1.1
 
-NEURON_threshold = 3
+NEURON_threshold = 4
 NEURON_rest = 0
 NEURON_undershoot = -1
 NEURON_decay = 0.3

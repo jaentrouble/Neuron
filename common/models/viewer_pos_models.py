@@ -28,12 +28,13 @@ def grid_pos_maker(left : int, top : int, space : int, columns : int, n : int):
         ])
     return pos
 
-def dopa_test_v_1(cmbi_start, outpt_start, val_start, gaba_start, dopa_start, reward_start, reward, width, height) :
+def dopa_test_v_1(cmbi_start, outpt_start, val_start, relay_start, gaba_start, dopa_start, reward_start, reward, width, height) :
     pos = []
     pos.extend(grid_pos_maker(10, 100, 10, 10, cmbi_start))
     pos.extend(grid_pos_maker(10, height//2 - 100, 10, 20, outpt_start - cmbi_start))
     pos.extend(grid_pos_maker(10, height - 20, 10, 10, val_start - outpt_start))
-    pos.extend(grid_pos_maker(width//2, height - 100, 10, 20, gaba_start - val_start))
+    pos.extend(grid_pos_maker(width//2, height - 100, 10, 20, relay_start - val_start))
+    pos.extend(grid_pos_maker(width - 200, height - 100, 10, 10, gaba_start - relay_start))
     pos.extend(grid_pos_maker(width - 120, height//2 - 100, 10, 10, dopa_start - gaba_start))
     pos.extend(grid_pos_maker(width//2, 10, 10, 10, reward_start - dopa_start))
     pos.extend(grid_pos_maker(width-100, 10, 10, 10, reward))

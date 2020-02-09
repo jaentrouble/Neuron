@@ -36,21 +36,23 @@ def dopa_test_e_1(inpt_strt, inpt_next_strt, n, rwrd_limit, rwrd_strt, rwrd_next
     """
     global g_var, g_var2, g_var3
     if g_var == None :
-        g_var = random.choices(range(inpt_strt, inpt_next_strt), k=n)
+        # g_var = random.choices(range(inpt_strt, inpt_next_strt), k=n)
+        g_var = list(range(inpt_next_strt-n, inpt_next_strt))
     if g_var2 == None :
         g_var2 = 0
     if not(g_var2 % 50) :
         g_var = g_var[1:]
-        lft = list(range(inpt_strt, inpt_next_strt))
-        lft = [l for l in lft if not (l in g_var)]
-        g_var.append(random.choice(lft))
+        # lft = list(range(inpt_strt, inpt_next_strt))
+        # lft = [l for l in lft if not (l in g_var)]
+        # g_var.append(random.choice(lft))
+        g_var.append((g_var[-1]+1-inpt_strt)%(inpt_next_strt-inpt_strt) + inpt_strt)
     tmp = []
     r = 0
     if not(g_var2 % 4):
         if g_var3 :
-                for i in range(rwrd_strt, rwrd_next_strt) :
-                    tmp.append([potential, i])
-                g_var3 = False
+            for i in range(rwrd_strt, rwrd_next_strt) :
+                tmp.append([potential, i])
+            g_var3 = False
         for i in g_var :
             tmp.append([potential, i])
             if i in range(n) :

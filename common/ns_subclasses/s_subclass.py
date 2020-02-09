@@ -70,3 +70,17 @@ class S_non_decaying(Synapse) :
     """
     def tick(self) :
         self.time += 1
+
+class S_relay(Synapse) :
+    """
+    S_relay
+    transfers signal, no weight change
+    """
+    def tick(self) :
+        pass
+
+    def pre_fired(self, arg) :
+        self.fired = True
+
+    def post_fired(self, arg) :
+        pass

@@ -15,6 +15,7 @@ def simple_neurons(N_num : int) :
 def dopa_test_n_1(inpt_n, combi_r, outpt, v_n, dopa, reward) :
     n_list = []
     idx = 0
+    relay = v_n
     gaba = v_n
     for _ in range(inpt_n) :
         n_list.append(Neuron(idx))
@@ -22,8 +23,11 @@ def dopa_test_n_1(inpt_n, combi_r, outpt, v_n, dopa, reward) :
     for _ in range(tools.combi(inpt_n, combi_r)):
         n_list.append(Neuron(idx))
         idx += 1
-    for _ in range(outpt + v_n + gaba) :
+    for _ in range(outpt + v_n) :
         n_list.append(Neuron(idx))
+        idx += 1
+    for _ in range(relay + gaba) :
+        n_list.append(N_AND_gate(idx))
         idx += 1
     for _ in range(dopa) :
         n_list.append(N_Dopa_emit(idx))
