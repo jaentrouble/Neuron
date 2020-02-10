@@ -33,7 +33,7 @@ def dopa_weight_modify(delta_prepost, delta_postdopa, dopa_q, weight) :
     dopa_q : quantity of dopamine
     """
     delta_prepost += 1
-    delta_postdopa -= 1
+    delta_postdopa += 1
     delta_firedopa = delta_postdopa + max(delta_prepost, 0)
 
     if (

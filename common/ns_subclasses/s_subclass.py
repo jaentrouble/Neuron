@@ -33,7 +33,7 @@ class S_Dopa_dependent(Synapse) :
         self.t_dopa = self.time
         self.weight = tools.dopa_weight_modify(
             self.t_pre - self.t_post,
-            self.t_post - self.t_dopa,
+            self.t_post - self.t_dopa - 2, # timing adjustment
             amount,
             self.weight
         )

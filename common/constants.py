@@ -26,7 +26,7 @@ DOPA_normal = 4
 DOPA_max = 8
 
 WEIGHT_max = 3
-WEIGHT_F_max = 0.01
+WEIGHT_F_max = 0.005
 WEIGHT_t_0 = 8
 
 WEIGHT_dopa_pp = 2
