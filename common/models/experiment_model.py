@@ -136,7 +136,7 @@ class dopa_test_1 () :
 
     WIDTH = 1000
     HEIGHT = 800
-    FPS = 4
+    FPS = 16
     v_model = vmodel.dopa_test_v_1
     v_kwargs = {
         'cmbi_start' : cmbi_start, 
