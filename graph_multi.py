@@ -80,5 +80,5 @@ for record in y_log2 :
     fig.add_trace(go.Scatter(x = list(range(ticks)), y = record), row = 2, col= 1)
 for record in y_log3 :
     fig.add_trace(go.Scatter(x = list(range(ticks)), y = record), row = 3, col= 1)
-fig.update_layout(template = 'plotly_dark', autosize = False, width = 1200, height = 1200)
+fig.update_layout(template = 'plotly_dark', autosize = False, width = 1000, height = 1000)
 fig.show()
