@@ -10,7 +10,7 @@ Every Neurons and Synapses are called as their index (or ID)
 """
 MODEL = emodel.dopa_test_1
 
-TICKS = 30000
+TICKS = 10000
 LOG_TICKS = 3000
 
 class Main_multi() :

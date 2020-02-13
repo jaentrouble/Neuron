@@ -19,6 +19,8 @@ for i in range(MODEL.N_S_THREAD) :
 log = log_loader.Log(n_log_names, s_log_names, LOG_connection_name)
 print('{} ticks of log loaded'.format(log.get_max_tick()+1))
 
+
+######################### Customize
 x_log1 = log.get_total_pot_log()
 x_log2 = log.get_total_wt_log()
 
@@ -75,7 +77,7 @@ for idx, record in enumerate(y_log1) :
         name = 'Reward'
     fig.add_trace(go.Scatter(x = list(range(ticks)), y = record, name= name), row = 1, col= 1)
 fig.update_xaxes(title_text = 'Ticks', row = 1, col = 1)
-fig.update_yaxes(title_text = 'Potential', row = 1, col = 1, range = [-19, 16])
+fig.update_yaxes(title_text = 'Potential', row = 1, col = 1,)
 for record in y_log2 :
     fig.add_trace(go.Scatter(x = list(range(ticks)), y = record), row = 2, col= 1)
 for record in y_log3 :

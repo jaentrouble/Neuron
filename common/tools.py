@@ -17,11 +17,11 @@ def weight_modify(delta_t : int, weight) :
     
     elif delta_t < 0 :
         # delta_t += 1
-        delta = (WEIGHT_F_max + (delta_t*WEIGHT_F_max)/WEIGHT_t_0) * WEIGHT_max
+        delta = WEIGHT_tan_bias + delta_t*WEIGHT_tan
         return min(weight + delta, WEIGHT_max)
 
     elif delta_t >= 0 :
-        delta = ((delta_t*WEIGHT_F_max)/WEIGHT_t_0 - WEIGHT_F_max) * WEIGHT_max
+        delta = -WEIGHT_tan_bias + delta_t*WEIGHT_tan
         return max(weight + delta, 0)
 
 def dopa_weight_modify(delta_prepost, delta_postdopa, dopa_q, weight) :
@@ -48,12 +48,12 @@ def dopa_weight_modify(delta_prepost, delta_postdopa, dopa_q, weight) :
     else :
         dopa = dopa_q - DOPA_normal
         if delta_prepost < 0 :
-            weight_delta_pp = WEIGHT_dopa_pp + (delta_prepost*WEIGHT_dopa_pp)/WEIGHT_t_0
+            weight_delta_pp = WEIGHT_dopa_pp + delta_prepost*WEIGHT_dopa_tan_pp
         elif delta_prepost >= 0 :
-            weight_delta_pp = -WEIGHT_dopa_pp + (delta_prepost*WEIGHT_dopa_pp)/WEIGHT_t_0
+            weight_delta_pp = -WEIGHT_dopa_pp + delta_prepost*WEIGHT_dopa_tan_pp
             weight_delta_pp *= WEIGHT_dopa_in_ex_ratio
         
-        weight_delta_pd = WEIGHT_dopa_pd + (delta_firedopa*WEIGHT_dopa_pd)/WEIGHT_t_0
+        weight_delta_pd = WEIGHT_dopa_pd + delta_firedopa*WEIGHT_dopa_tan_pd
         
         delta_weight = weight_delta_pp * weight_delta_pd * WEIGHT_F_max * WEIGHT_max * dopa/DOPA_normal
         return min(max(weight + delta_weight + SYNAPSE_decay, 0), WEIGHT_max)
