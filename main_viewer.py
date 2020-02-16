@@ -80,6 +80,17 @@ class Main() :
                     # start/stop
                     elif event.key == pygame.K_SPACE :
                         self.play = not self.play
+
+                    elif event.key == pygame.K_RIGHT and not self.play :
+                        self.tick += 1
+                        self.update_particles(self.tick)
+                        self.allgroup.clear(self.screen, self.background)
+                        self.allgroup.draw(self.screen)
+                    elif event.key == pygame.K_LEFT and not self.play :
+                        self.tick -= 1
+                        self.update_particles(self.tick)
+                        self.allgroup.clear(self.screen, self.background)
+                        self.allgroup.draw(self.screen)
             if self.play and self.tick <= self.max_tick:
                 self.update_particles(self.tick)
                 self.allgroup.clear(self.screen, self.background)
