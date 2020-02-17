@@ -25,8 +25,7 @@ x_log1 = log.get_total_pot_log()
 x_log2 = log.get_total_wt_log()
 
 y_log1 = []
-y_log_potsum_r = 0
-y_log_potsum_nr = 0
+
 ticks = log.get_max_tick()
 s_len1 = len(x_log1[0])
 for idx in range(MODEL.dopa_start, MODEL.reward_start + MODEL.reward) :
@@ -34,18 +33,57 @@ for idx in range(MODEL.dopa_start, MODEL.reward_start + MODEL.reward) :
     for tick in x_log1 :
         tmp.append(tick[idx][1])
     y_log1.append(tmp)
-
+    
+potsum_r = 0
+potsum_r_p = 0
+potsum_r_n = 0
+potsum_nr = 0
+potsum_nr_p = 0
+potsum_nr_n = 0
+potmax_r_p = 0
+potmax_r_n = 0
+potmax_nr_p = 0
+potmax_nr_n = 0
 r_count = 0
+r_p_count = 0
+r_n_count = 0
 nr_count = 0
+nr_p_count = 0
+nr_n_count = 0
 for t, tick in enumerate(x_log1[:-2]) :
+    pot = x_log1[t+2][MODEL.dopa_start][1]
     if tick[MODEL.reward_start][1] > 0 :
-        y_log_potsum_r += x_log1[t+2][MODEL.dopa_start][1]
+        potsum_r += pot
+        if pot > 0 :
+            potsum_r_p += pot
+            if pot > potmax_r_p :
+                potmax_r_p = pot
+            r_p_count += 1
+        elif pot < 0 :
+            potsum_r_n += pot
+            if pot < potmax_r_n :
+                potmax_r_n = pot
+            r_n_count += 1
         r_count += 1
     else :
-        y_log_potsum_nr += x_log1[t+2][MODEL.dopa_start][1]
+        potsum_nr += pot
+        if pot > 0 :
+            potsum_nr_p += pot
+            if pot > potmax_nr_p :
+                potmax_nr_p = pot
+            nr_p_count += 1
+        elif pot < 0 :
+            potsum_nr_n += pot
+            if pot < potmax_nr_n :
+                potmax_nr_n = pot
+            nr_n_count += 1
         nr_count += 1
-print('rewarded average pot :', y_log_potsum_r/r_count)
-print('nonrewarded average pot :', y_log_potsum_nr/((nr_count-3*r_count)/4))
+print('rewarded average pot :{:.2f}'.format(potsum_r/r_count))
+print('rewarded positive Mean : {0:.2f}, Max : {1:.2f}'.format(potsum_r_p/r_p_count, potmax_r_p))
+print('rewarded negative Mean : {0:.2f}, Min : {1:.2f}'.format(potsum_r_n/r_n_count, potmax_r_n))
+print('nonrewarded average pot :{:.2f}'.format(potsum_nr/((nr_count-3*r_count)/4)))
+print('nonrewarded positive Mean : {0:.2f}, Max : {1:.2f}'.format(potsum_nr_p/nr_p_count, potmax_nr_p))
+print('nonrewarded negative Mean : {0:.2f}, Min : {1:.2f}'.format(potsum_nr_n/nr_n_count, potmax_nr_n))
 
 y_log2 = []
 s_len2 = len(x_log2[0])
