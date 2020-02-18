@@ -5,6 +5,7 @@ import rapidjson
 from multiprocessing import Process, Queue, freeze_support
 import os
 from common.models import experiment_model as emodel
+import time
 """
 Every Neurons and Synapses are called as their index (or ID)
 """
@@ -45,7 +46,7 @@ class Main_multi() :
                     self.n_post_Q[i],
                     self.n_potential_Q[i],
                     i,
-                    LOG_TICKS,
+                    TICKS - LOG_TICKS,
                 )
             ))
         for i in range(MODEL.N_S_THREAD) :
@@ -60,7 +61,7 @@ class Main_multi() :
                     self.s_post_Q[i],
                     self.s_potential_Q[i],
                     i,
-                    LOG_TICKS,
+                    TICKS - LOG_TICKS,
                 )
             ))
 
@@ -92,6 +93,7 @@ class Main_multi() :
         total_potentials = []
         total_pre = []
         total_post = []
+        init_time = time.time()
         for _ in range(MODEL.N_N_THREAD):
             total_potentials.append([])
         for _ in range(MODEL.N_S_THREAD) :
@@ -146,6 +148,8 @@ class Main_multi() :
             n_p.join()
         for s_p in self.s_procs :
             s_p.join()
+
+        print('total time : {:.2f}'.format(time.time()-init_time))
 
 if __name__ == '__main__' :
     freeze_support()

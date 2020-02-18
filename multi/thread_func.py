@@ -3,10 +3,11 @@ from common.constants import *
 import rapidjson
 import os
 
-def neuron_init(n_list : list, pre_Q : Queue, post_Q : Queue, Potential_Q : Queue, num : int, log_max = -1):
+def neuron_init(n_list : list, pre_Q : Queue, post_Q : Queue, Potential_Q : Queue, num : int, log_begin = -1):
     potent_log = [] # [[id, potential],...]
     fired_log = [] # [id,...]
     start_index = n_list[0].get_id()
+    count = 0
     while True :
         fired_to_neurons = Potential_Q.get()
         pre_fired = []
@@ -34,14 +35,11 @@ def neuron_init(n_list : list, pre_Q : Queue, post_Q : Queue, Potential_Q : Queu
                 post_fired.extend(i)
                 tmp_fired.append(idx)
         
-        if log_max > 0  and len(potent_log) >= log_max:
-            potent_log.pop(0)
-            fired_log.pop(0)
+        if count >= log_begin :
             potent_log.append(tmp_potent)
             fired_log.append(tmp_fired)
-        else :
-            potent_log.append(tmp_potent)
-            fired_log.append(tmp_fired)
+
+        count += 1
         pre_Q.put(pre_fired)
         post_Q.put(post_fired)
 
@@ -51,10 +49,11 @@ def neuron_init(n_list : list, pre_Q : Queue, post_Q : Queue, Potential_Q : Queu
             str(MULTI_fired_neuron_log) : fired_log,
         }, logfile)
 
-def synapse_init(s_list : list, pre_Q : Queue, post_Q : Queue, Potential_Q : Queue, num : int, log_max = -1) :
+def synapse_init(s_list : list, pre_Q : Queue, post_Q : Queue, Potential_Q : Queue, num : int, log_begin = -1) :
     weight_log = []
     fired_log = []
     start_index = s_list[0].get_id()
+    count = 0
     while True :
         pre_fired = pre_Q.get()
         post_fired = post_Q.get()
@@ -82,14 +81,12 @@ def synapse_init(s_list : list, pre_Q : Queue, post_Q : Queue, Potential_Q : Que
             if s.is_fired():
                 fired_to_neurons.append(s.get_signal())
                 tmp_fired.append(idx)
-        if log_max > 0 and len(weight_log) >= log_max :
-            weight_log.pop(0)
-            fired_log.pop(0)
+
+        if count >= log_begin :
             weight_log.append(tmp_weight)
             fired_log.append(tmp_fired)
-        else :
-            weight_log.append(tmp_weight)
-            fired_log.append(tmp_fired)
+
+        count += 1
         Potential_Q.put(fired_to_neurons)
 
     with open(os.path.join(LOG_path, LOG_multi_synapse_name.format(num)), 'w') as logfile :
