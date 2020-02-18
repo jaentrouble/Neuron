@@ -53,10 +53,15 @@ def dopa_test_e_1(inpt_strt, inpt_next_strt, n, rwrd_limit, rwrd_strt, rwrd_next
             for i in range(rwrd_strt, rwrd_next_strt) :
                 tmp.append([potential, i])
             g_var3 = False
-        for i in g_var :
-            tmp.append([potential, i])
+        tmp2 = g_var.copy()
+        tmp2.pop()
+        lft = list(range(inpt_strt, inpt_next_strt))
+        lft = [l for l in lft if not (l in tmp2)]
+        tmp2.append(random.choice(lft))
+        for i in tmp2 :
             if i in range(n) :
                 r += 1
+            tmp.append([potential, i])
         if r > rwrd_limit :
             g_var3 = True
     g_var2 += 1
