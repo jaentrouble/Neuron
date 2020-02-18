@@ -7,6 +7,7 @@ from viewer import log_loader
 from common.models import experiment_model as emodel
 from common.constants import *
 from common import tools
+import csv
 MODEL = emodel.dopa_test_1
 
 
@@ -50,6 +51,10 @@ r_n_count = 0
 nr_count = 0
 nr_p_count = 0
 nr_n_count = 0
+r_p_list = ['r_p']
+r_n_list = ['r_n']
+nr_p_list = ['nr_p']
+nr_n_list = ['nr_n']
 for t, tick in enumerate(x_log1[:-2]) :
     pot = x_log1[t+2][MODEL.dopa_start][1]
     if tick[MODEL.reward_start][1] > 0 :
@@ -59,11 +64,13 @@ for t, tick in enumerate(x_log1[:-2]) :
             if pot > potmax_r_p :
                 potmax_r_p = pot
             r_p_count += 1
+            r_p_list.append(pot)
         elif pot < 0 :
             potsum_r_n += pot
             if pot < potmax_r_n :
                 potmax_r_n = pot
             r_n_count += 1
+            r_n_list.append(pot)
         r_count += 1
     else :
         potsum_nr += pot
@@ -72,11 +79,13 @@ for t, tick in enumerate(x_log1[:-2]) :
             if pot > potmax_nr_p :
                 potmax_nr_p = pot
             nr_p_count += 1
+            nr_p_list.append(pot)
         elif pot < 0 :
             potsum_nr_n += pot
             if pot < potmax_nr_n :
                 potmax_nr_n = pot
             nr_n_count += 1
+            nr_n_list.append(pot)
         nr_count += 1
 print('rewarded average pot :{:.2f}'.format(potsum_r/r_count))
 print('rewarded positive Mean : {0:.2f}, Max : {1:.2f}'.format(potsum_r_p/r_p_count, potmax_r_p))
@@ -84,6 +93,13 @@ print('rewarded negative Mean : {0:.2f}, Min : {1:.2f}'.format(potsum_r_n/r_n_co
 print('nonrewarded average pot :{:.2f}'.format(potsum_nr/((nr_count-3*r_count)/4)))
 print('nonrewarded positive Mean : {0:.2f}, Max : {1:.2f}'.format(potsum_nr_p/nr_p_count, potmax_nr_p))
 print('nonrewarded negative Mean : {0:.2f}, Min : {1:.2f}'.format(potsum_nr_n/nr_n_count, potmax_nr_n))
+
+with open(os.path.join(LOG_path,'dopa_pot.csv'), 'w', newline= '') as csvfile :
+    potwriter = csv.writer(csvfile)
+    potwriter.writerow(r_p_list)
+    potwriter.writerow(r_n_list)
+    potwriter.writerow(nr_p_list)
+    potwriter.writerow(nr_n_list)
 
 y_log2 = []
 s_len2 = len(x_log2[0])
