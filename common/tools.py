@@ -64,13 +64,19 @@ def combi(n, k) :
     else :
         return int(math.factorial(n)/(math.factorial(k) * math.factorial(n-k)))
 
-def split(lst, n) :
+def split(lst, n, overlap = 0) :
+    """
+    splits given list into n equal segments.
+    left overs will be evenly distributed.
+    Segments keeps the order of the list.
+    Overlaps to the next segment.
+    """
     smallstep = len(lst)//n
     leftover = len(lst) % n
     div = [smallstep+1 if i<leftover else smallstep for i in range(n)]
     idx = 0
     chunks = []
     for step in div :
-        chunks.append(lst[idx:idx+step])
+        chunks.append(lst[idx:idx+step+overlap])
         idx += step
     return chunks

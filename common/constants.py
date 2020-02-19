@@ -18,6 +18,8 @@ LOG_multi_neuron_name = 'log_neuron_thread_{}.json'
 LOG_multi_synapse_name = 'log_synapse_thread_{}.json'
 LOG_connection_name = 'log_connection.json'
 
+RANDOM_SEED = 0
+
 #modifiable-------------------------------------------
 SYNAPSE_decay = 0.0001
 SYNAPSE_default_weight = 1

@@ -85,7 +85,8 @@ class dopa_test_1 () :
     inpt_n = 10
     combi_r = 5
     outpt = 9
-    v_n = 63
+    v_n = 126
+    overlap = 2
     dopa = 1
     reward = 1
 
@@ -94,8 +95,8 @@ class dopa_test_1 () :
 
     N_N_THREAD = 2
     N_S_THREAD = 4
-    N_NEURON = 250
-    N_SYNAPSE = 600
+    N_NEURON = 350
+    N_SYNAPSE = 650
     cmbi_start = inpt_n
     outpt_start = cmbi_start + tools.combi(inpt_n, combi_r)
     val_start = outpt_start + outpt
@@ -121,6 +122,7 @@ class dopa_test_1 () :
         'v_n' : v_n,
         'dopa' : dopa,
         'reward' : reward,
+        'overlap' : overlap,
     }
     ext_model = epmodel.dopa_test_e_1
     ext_kwargs = {
