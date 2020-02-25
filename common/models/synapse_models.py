@@ -21,7 +21,7 @@ def random_synapses(S_num : int,N_num : int ,ex_percent : float):
 
     return s_list
     
-def dopa_test_s_1 (inpt_n, combi_r, outpt, v_n, overlap, dopa, reward) :
+def dopa_test_s_1 (inpt_n, combi_r, outpt, v_n, overlap, dopa, reward, gamma) :
     s_list = []
     idx = 0
     cmbi_start = inpt_n
@@ -69,7 +69,7 @@ def dopa_test_s_1 (inpt_n, combi_r, outpt, v_n, overlap, dopa, reward) :
                 SYNAPSE_excitatory,
                 list(range(dopa_start,reward_start)),
                 idx,
-                discount= 0.6,
+                discount= gamma,
                 init_weight= 0,
             ))
             idx += 1

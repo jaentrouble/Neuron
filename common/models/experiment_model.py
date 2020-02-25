@@ -89,6 +89,7 @@ class dopa_test_1 () :
     overlap = 2
     dopa = 1
     reward = 1
+    gamma = 0.6
 
     inpt_pot_n = 5
     rwrd_limit = 3
@@ -123,6 +124,7 @@ class dopa_test_1 () :
         'dopa' : dopa,
         'reward' : reward,
         'overlap' : overlap,
+        'gamma' : gamma,
     }
     ext_model = epmodel.dopa_test_e_1
     ext_kwargs = {
