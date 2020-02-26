@@ -59,9 +59,9 @@ def dopa_test_c_1(ext_model, ext_kwargs, run_n, gamma) :
                     next_reward = 1
         v = model(np.array([s_mask]))
         vp = model(np.array([sp_mask]))
-        model.fit(np.array([s_mask]), reward + gamma * vp)
+        model.fit(np.array([s_mask]), reward + gamma * vp, verbose = 0)
         TD_log.append(float(gamma*vp - v))
-        V_log.append(list(model(V_log_template)))
+        V_log.append(model(V_log_template).numpy().tolist())
 
     print(TD_log)
     print(V_log)
