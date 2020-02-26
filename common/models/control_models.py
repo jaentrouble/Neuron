@@ -34,6 +34,18 @@ def dopa_test_c_1(ext_model, ext_kwargs, run_n, gamma) :
             elif t[1] in range(rwrd_strt, rwrd_next_strt) :
                 next_reward = 1
 
+    TD_log = []
+    V_log = []
+    tmp1, tmp2 = np.meshgrid(
+        np.arange(inpt_n),
+        np.arange(ext_kwargs['n']),
+        indexing = 'ij'
+    )
+    tmp3 = (tmp1 + tmp2) % 10
+    V_log_template = np.zeros((inpt_n, inpt_n))
+    for idx, row in enumerate(V_log_template) :
+        row[tmp3[idx]] = 1
+
     for _ in range(run_n) :
         s_mask = sp_mask
         reward = next_reward
@@ -47,3 +59,9 @@ def dopa_test_c_1(ext_model, ext_kwargs, run_n, gamma) :
                     next_reward = 1
         v = model(np.array([s_mask]))
         vp = model(np.array([sp_mask]))
+        model.fit(np.array([s_mask]), reward + gamma * vp)
+        TD_log.append(float(gamma*vp - v))
+        V_log.append(list(model(V_log_template)))
+
+    print(TD_log)
+    print(V_log)

@@ -2,6 +2,7 @@ from common.models import synapse_models as smodel
 from common.models import viewer_pos_models as vmodel
 from common.models import ext_pot_models as epmodel
 from common.models import neuron_models as nmodel
+from common.models import control_models as cmodel
 from common import tools
 from common.constants import *
 
@@ -22,6 +23,10 @@ class CLASSNAME () :
     }
     ext_model =
     ext_kwargs = {
+
+    }
+    ctl_model =
+    ctl_kwargs = {
 
     }
     # Viewer Settings ###########################
@@ -136,6 +141,14 @@ class dopa_test_1 () :
         'rwrd_next_strt' : reward_start + reward,
         'potential' : NEURON_threshold + 1
     }
+    ctl_model = cmodel.dopa_test_c_1
+    ctl_kwargs = {
+        'ext_model' : ext_model,
+        'ext_kwargs' : ext_kwargs,
+        'run_n' : 2,
+        'gamma' : gamma,
+    }
+
     # Viewer Settings ###########################
 
     WIDTH = 1000
