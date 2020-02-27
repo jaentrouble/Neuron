@@ -13,10 +13,15 @@ MULTI_fired_neuron_log = 1
 MULTI_weight_log = 2
 MULTI_fired_synapse_log = 3
 
+CTL_TD_LOG = 0
+CTL_V_LOG = 1
+CTL_R_LOG = 2
+
 LOG_path = 'log'
 LOG_multi_neuron_name = 'log_neuron_thread_{}.json'
 LOG_multi_synapse_name = 'log_synapse_thread_{}.json'
 LOG_connection_name = 'log_connection.json'
+LOG_control_name = 'log_control.json'
 
 RANDOM_SEED = 0
 

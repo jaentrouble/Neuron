@@ -8,6 +8,9 @@ from common.constants import *
 
 """
 class CLASSNAME () :
+    ticks =
+    log_ticks =
+
     N_N_THREAD =
     N_S_THREAD =
     N_NEURON =
@@ -87,11 +90,14 @@ class random_test_1() :
     }
 
 class dopa_test_1 () :
+    ticks = 20000
+    log_ticks = 2000
+
     inpt_n = 10
     combi_r = 5
     outpt = 9
-    v_n = 126
-    overlap = 2
+    v_n = 63
+    overlap = 0
     dopa = 1
     reward = 1
     gamma = 0.6
@@ -145,7 +151,7 @@ class dopa_test_1 () :
     ctl_kwargs = {
         'ext_model' : ext_model,
         'ext_kwargs' : ext_kwargs,
-        'run_n' : 2,
+        'run_n' : 5000,
         'gamma' : gamma,
     }
 
