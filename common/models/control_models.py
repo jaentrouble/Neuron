@@ -19,8 +19,8 @@ def dopa_test_c_1(ext_model, ext_kwargs, run_n, gamma) :
     rwrd_strt = ext_kwargs['rwrd_strt']
     rwrd_next_strt = ext_kwargs['rwrd_next_strt']
     inputs = keras.Input(shape = (inpt_n))
-    x = keras.layers.Dense(10, activation='relu')(inputs)
-    outputs = keras.layers.Dense(1)(x)
+    # x = keras.layers.Dense(10, activation='relu')(inputs)
+    outputs = keras.layers.Dense(1)(inputs)
     model = keras.Model(inputs = inputs, outputs = outputs)
     model.compile(
         loss = keras.losses.MeanSquaredError(),

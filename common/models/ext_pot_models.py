@@ -41,7 +41,7 @@ def dopa_test_e_1(inpt_strt, inpt_next_strt, n, rwrd_limit, rwrd_strt, rwrd_next
         g_var = list(range(inpt_next_strt-n, inpt_next_strt))
     if g_var2 == None :
         g_var2 = 0
-    if not(g_var2 % 50) :
+    if not(g_var2 % 4) :
         g_var = g_var[1:]
         # lft = list(range(inpt_strt, inpt_next_strt))
         # lft = [l for l in lft if not (l in g_var)]
