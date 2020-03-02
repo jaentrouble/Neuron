@@ -49,16 +49,17 @@ def dopa_test_e_1(inpt_strt, inpt_next_strt, n, rwrd_limit, rwrd_strt, rwrd_next
         g_var.append((g_var[-1]+1-inpt_strt)%(inpt_next_strt-inpt_strt) + inpt_strt)
     tmp = []
     r = 0
+    ######## Reward is not delayed (Modified for control)
     if not(g_var2 % 4):
-        if g_var3 :
-            for i in range(rwrd_strt, rwrd_next_strt) :
-                tmp.append([potential, i])
-            g_var3 = False
         for i in g_var :
             tmp.append([potential, i])
             if i in range(n) :
                 r += 1
         if r > rwrd_limit :
             g_var3 = True
+        if g_var3 :
+            for i in range(rwrd_strt, rwrd_next_strt) :
+                tmp.append([potential, i])
+            g_var3 = False
     g_var2 += 1
     return tmp
