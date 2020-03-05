@@ -16,20 +16,18 @@ class N_Dopa_emit(Neuron) :
         
     def get_signal(self) :
         """
-        returns list of [[NT_DOPA, amount], idx] for ex synapses
+        returns list of [NT_DOPA, amount, idx] for ex synapses
         amount is proportion to the potential
         """
         s_in = []
         s_ex = []
         if self.potential >= NEURON_threshold :
             for s in self.in_synapses :
-                s_in.append([NT_DEFAULT, s])
+                s_in.append([NT_DEFAULT,1, s])
         for s in self.ex_synapses :
             s_ex.append([
-                [
-                    NT_DOPA,
-                    max(min(DOPA_max, DOPA_normal + self.potential - NEURON_rest), 0)
-                ],
+                NT_DOPA,
+                max(min(DOPA_max, DOPA_normal + self.potential - NEURON_rest), 0),
                 s,
             ])
         self.potential = NEURON_rest

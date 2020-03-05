@@ -1,6 +1,12 @@
 from common.constants import *
 from common import tools
 
+"""
+Neurotransmitters are in the form of
+[Type, Amount, Destination idx]
+"""
+
+
 class Neuron():
     """
     Neuron
@@ -68,15 +74,15 @@ class Neuron():
         Caution : Does not check if potential is higher than threshold
         use is_fired first
         returns in-synapse list, ex-synapse list and resets potential to undershoot
-        lists contains [NT_DEFAULT, idx]
+        lists contains [NT_DEFAULT,1 ,idx]
         """
         self.potential = NEURON_undershoot
         s_in = []
         s_ex = []
         for s in self.in_synapses :
-            s_in.append([NT_DEFAULT,s])
+            s_in.append([NT_DEFAULT,1,s])
         for s in self.ex_synapses :
-            s_ex.append([NT_DEFAULT,s])
+            s_ex.append([NT_DEFAULT,1,s])
         return s_in, s_ex
 
     def get_id(self) :

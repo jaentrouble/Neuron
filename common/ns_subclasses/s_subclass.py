@@ -19,12 +19,11 @@ class S_Dopa_dependent(Synapse) :
         self.discount = discount
 
     def pre_fired(self, arg) :
-        if arg == NT_DEFAULT :
+        if arg[0] == NT_DEFAULT :
             self.t_pre = self.time
             self.fired = True
-        elif isinstance(arg, list) :
-            if arg[0] == NT_DOPA :
-                self.dopa_passed(arg[1])
+        elif arg[0] == NT_DOPA :
+            self.dopa_passed(arg[1])
 
     def post_fired(self, arg) :
         self.t_post = self.time

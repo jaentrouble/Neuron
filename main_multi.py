@@ -122,12 +122,12 @@ class Main_multi() :
 
             for idx in range(MODEL.N_N_THREAD) :
                 for pre in self.n_pre_Q[idx].get() :
-                    total_pre[pre[1]//MODEL.N_SYNAPSE].append(pre)
+                    total_pre[pre[-1]//MODEL.N_SYNAPSE].append(pre)
                 for post in self.n_post_Q[idx].get() :
-                    total_post[post[1]//MODEL.N_SYNAPSE].append(post)
+                    total_post[post[-1]//MODEL.N_SYNAPSE].append(post)
             for idx in range(MODEL.N_S_THREAD) :
                 for n in self.s_potential_Q[idx].get() :
-                    total_potentials[n[1]//MODEL.N_NEURON].append(n)
+                    total_potentials[n[-1]//MODEL.N_NEURON].append(n)
 
         #########################################################
         for Q in self.n_potential_Q :

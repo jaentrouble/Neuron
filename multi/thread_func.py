@@ -22,7 +22,7 @@ def neuron_init(n_list : list, pre_Q : Queue, post_Q : Queue, Potential_Q : Queu
             n.tick()
         # 4
         for n in fired_to_neurons :
-            n_list[n[1]-start_index].input_potential(n[0])
+            n_list[n[-1]-start_index].input_potential(n[0])
 
         # 1
         tmp_potent = []
@@ -69,9 +69,9 @@ def synapse_init(s_list : list, pre_Q : Queue, post_Q : Queue, Potential_Q : Que
 
         # 2
         for s in post_fired :
-            s_list[s[1] - start_index].post_fired(s[0])
+            s_list[s[-1] - start_index].post_fired(s)
         for s in pre_fired :
-            s_list[s[1] - start_index].pre_fired(s[0])
+            s_list[s[-1] - start_index].pre_fired(s)
 
         # 3
         tmp_weight = []
