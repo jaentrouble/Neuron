@@ -104,7 +104,7 @@ class Main_multi() :
             print('Tick : {}'.format(t+1))
             external = MODEL.ext_model(**MODEL.ext_kwargs)
             for n in external :
-                total_potentials[n[1]//MODEL.N_NEURON].append(n)
+                total_potentials[n[-1]//MODEL.N_NEURON].append(n)
 
             for idx, Q in enumerate(self.n_potential_Q) :
                 Q.put(total_potentials[idx])
