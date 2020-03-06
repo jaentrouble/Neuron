@@ -9,7 +9,7 @@ import time
 """
 Every Neurons and Synapses are called as their index (or ID)
 """
-MODEL = emodel.dopa_test_1
+MODEL = emodel.random_test_1
 
 TICKS = MODEL.ticks
 LOG_TICKS = MODEL.log_ticks
@@ -64,6 +64,32 @@ class Main_multi() :
                     TICKS - LOG_TICKS,
                 )
             ))
+            self.s_n_dist = Process(
+                target = tf.s_to_n_distributer,
+                args = (
+                    self.n_potential_Q,
+                    self.s_potential_Q,
+                    MODEL.N_N_THREAD,
+                    MODEL.N_NEURON,
+                    MODEL.N_S_THREAD,
+                    TICKS,
+                    MODEL.ext_model,
+                    MODEL.ext_kwargs,
+                )
+            )
+            self.n_s_dist = Process(
+                target= tf.n_to_s_distributer,
+                args= (
+                    self.s_pre_Q,
+                    self.s_post_Q,
+                    self.n_pre_Q,
+                    self.n_post_Q,
+                    MODEL.N_S_THREAD,
+                    MODEL.N_SYNAPSE,
+                    MODEL.N_N_THREAD,
+                    TICKS,
+                )
+            )
 
     def synapse_connector(self) :
         for s in self.s_list :
@@ -90,52 +116,54 @@ class Main_multi() :
             n_p.start()
         for s_p in self.s_procs :
             s_p.start()
-        total_potentials = []
-        total_pre = []
-        total_post = []
+        self.s_n_dist.start()
+        self.n_s_dist.start()
+        # total_potentials = []
+        # total_pre = []
+        # total_post = []
         init_time = time.time()
-        for _ in range(MODEL.N_N_THREAD):
-            total_potentials.append([])
-        for _ in range(MODEL.N_S_THREAD) :
-            total_pre.append([])
-            total_post.append([])
+        # for _ in range(MODEL.N_N_THREAD):
+        #     total_potentials.append([])
+        # for _ in range(MODEL.N_S_THREAD) :
+        #     total_pre.append([])
+        #     total_post.append([])
         ####################################Tick#############
-        for t in range(TICKS) :
-            print('Tick : {}'.format(t+1))
-            external = MODEL.ext_model(**MODEL.ext_kwargs)
-            for n in external :
-                total_potentials[n[-1]//MODEL.N_NEURON].append(n)
+        # for t in range(TICKS) :
+            # print('Tick : {}'.format(t+1))
+            # external = MODEL.ext_model(**MODEL.ext_kwargs)
+            # for n in external :
+            #     total_potentials[n[-1]//MODEL.N_NEURON].append(n)
 
-            for idx, Q in enumerate(self.n_potential_Q) :
-                Q.put(total_potentials[idx])
+            # for idx, Q in enumerate(self.n_potential_Q) :
+            #     Q.put(total_potentials[idx])
 
-            for idx in range(MODEL.N_S_THREAD) :
-                self.s_pre_Q[idx].put(total_pre[idx])
-                self.s_post_Q[idx].put(total_post[idx])
+            # for idx in range(MODEL.N_S_THREAD) :
+            #     self.s_pre_Q[idx].put(total_pre[idx])
+            #     self.s_post_Q[idx].put(total_post[idx])
 
             #--------------------------------------------
-            for i in range(MODEL.N_N_THREAD):
-                total_potentials[i] = []
-            for i in range(MODEL.N_S_THREAD) :
-                total_pre[i] = []
-                total_post[i] = []
+            # for i in range(MODEL.N_N_THREAD):
+            #     total_potentials[i] = []
+            # for i in range(MODEL.N_S_THREAD) :
+            #     total_pre[i] = []
+            #     total_post[i] = []
 
-            for idx in range(MODEL.N_N_THREAD) :
-                for pre in self.n_pre_Q[idx].get() :
-                    total_pre[pre[-1]//MODEL.N_SYNAPSE].append(pre)
-                for post in self.n_post_Q[idx].get() :
-                    total_post[post[-1]//MODEL.N_SYNAPSE].append(post)
-            for idx in range(MODEL.N_S_THREAD) :
-                for n in self.s_potential_Q[idx].get() :
-                    total_potentials[n[-1]//MODEL.N_NEURON].append(n)
+            # for idx in range(MODEL.N_N_THREAD) :
+            #     for pre in self.n_pre_Q[idx].get() :
+            #         total_pre[pre[-1]//MODEL.N_SYNAPSE].append(pre)
+            #     for post in self.n_post_Q[idx].get() :
+            #         total_post[post[-1]//MODEL.N_SYNAPSE].append(post)
+            # for idx in range(MODEL.N_S_THREAD) :
+            #     for n in self.s_potential_Q[idx].get() :
+            #         total_potentials[n[-1]//MODEL.N_NEURON].append(n)
 
         #########################################################
-        for Q in self.n_potential_Q :
-            Q.put(MULTI_sentinel)
-        for Q in self.s_post_Q :
-            Q.put(MULTI_sentinel)
-        for Q in self.s_pre_Q :
-            Q.put(MULTI_sentinel)
+        # for Q in self.n_potential_Q :
+        #     Q.put(MULTI_sentinel)
+        # for Q in self.s_post_Q :
+        #     Q.put(MULTI_sentinel)
+        # for Q in self.s_pre_Q :
+        #     Q.put(MULTI_sentinel)
         # neuron_log = []
         # synapse_log = []
         # while len(neuron_log) < N_N_THREAD :
@@ -144,6 +172,8 @@ class Main_multi() :
         #     synapse_log.append(self.s_log_Q.get())
         self.connection_logging()
 
+        self.s_n_dist.join()
+        self.n_s_dist.join()
         for n_p in self.n_procs :
             n_p.join()
         for s_p in self.s_procs :

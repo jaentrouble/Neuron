@@ -96,3 +96,58 @@ def synapse_init(s_list : list, pre_Q : Queue, post_Q : Queue, Potential_Q : Que
         }, logfile)
 # if __name__ == '__main__' :
 #     freeze_support()
+
+def s_to_n_distributer(n_pot_q : list, s_pot_q : list, N_N_THREAD : int,
+                       N_NEURON : int, N_S_THREAD : int, ticks : int,
+                       ext_model, ext_kwargs):
+    total_potentials = []
+    for _ in range(N_N_THREAD) :
+        total_potentials.append([])
+    for t in range(ticks) :
+        print('Tick : {}'.format(t+1))
+        external = ext_model(**ext_kwargs)
+        for n in external :
+            total_potentials[n[-1]// N_NEURON].append(n)
+        for idx, Q in enumerate(n_pot_q) :
+            Q.put(total_potentials[idx])
+
+        #----------------------------------------------------
+        for i in range(N_N_THREAD) :
+            total_potentials[i] = []
+
+        for idx in range(N_S_THREAD) :
+            for n in s_pot_q[idx].get() :
+                total_potentials[n[-1]// N_NEURON].append(n)
+        
+    for Q in n_pot_q :
+        Q.put(MULTI_sentinel)
+
+def n_to_s_distributer(s_pre_Q : list, s_post_Q : list,
+                       n_pre_Q : list, n_post_Q : list,
+                       N_S_THREAD : int, N_SYNAPSE : int,
+                       N_N_THREAD : int, ticks : int) :
+    total_pre = []
+    total_post = []
+    for _ in range(N_S_THREAD) :
+        total_pre.append([])
+        total_post.append([])
+    for t in range(ticks) :
+        for idx in range(N_S_THREAD) :
+            s_pre_Q[idx].put(total_pre[idx])
+            s_post_Q[idx].put(total_post[idx])
+
+        #-------------------------------------------
+        for i in range(N_S_THREAD) :
+            total_pre[i] = []
+            total_post[i] = []
+
+        for idx in range(N_N_THREAD) :
+            for pre in n_pre_Q[idx].get() :
+                total_pre[pre[-1] // N_SYNAPSE].append(pre)
+            for post in n_post_Q[idx].get() :
+                total_post[post[-1] // N_SYNAPSE].append(post)
+
+    for Q in s_post_Q :
+        Q.put(MULTI_sentinel)
+    for Q in s_pre_Q :
+        Q.put(MULTI_sentinel)
