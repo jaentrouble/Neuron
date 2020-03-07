@@ -104,7 +104,8 @@ def s_to_n_distributer(n_pot_q : list, s_pot_q : list, N_N_THREAD : int,
     for _ in range(N_N_THREAD) :
         total_potentials.append([])
     for t in range(ticks) :
-        print('Tick : {}'.format(t+1))
+        if not t % 100 :
+            print('Ticks : {0}/{1}'.format(t, ticks))
         external = ext_model(**ext_kwargs)
         for n in external :
             total_potentials[n[-1]// N_NEURON].append(n)

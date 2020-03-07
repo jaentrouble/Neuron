@@ -88,11 +88,15 @@ for t, tick in enumerate(x_log1[:-2]) :
             nr_n_list.append(pot)
         nr_count += 1
 print('rewarded average pot :{:.2f}'.format(potsum_r/r_count))
-print('rewarded positive Mean : {0:.2f}, Max : {1:.2f}'.format(potsum_r_p/r_p_count, potmax_r_p))
-print('rewarded negative Mean : {0:.2f}, Min : {1:.2f}'.format(potsum_r_n/r_n_count, potmax_r_n))
+if r_p_count > 0 :
+    print('rewarded positive Mean : {0:.2f}, Max : {1:.2f}'.format(potsum_r_p/r_p_count, potmax_r_p))
+if r_n_count > 0 :
+    print('rewarded negative Mean : {0:.2f}, Min : {1:.2f}'.format(potsum_r_n/r_n_count, potmax_r_n))
 print('nonrewarded average pot :{:.2f}'.format(potsum_nr/((nr_count-3*r_count)/4)))
-print('nonrewarded positive Mean : {0:.2f}, Max : {1:.2f}'.format(potsum_nr_p/nr_p_count, potmax_nr_p))
-print('nonrewarded negative Mean : {0:.2f}, Min : {1:.2f}'.format(potsum_nr_n/nr_n_count, potmax_nr_n))
+if nr_p_count > 0 :
+    print('nonrewarded positive Mean : {0:.2f}, Max : {1:.2f}'.format(potsum_nr_p/nr_p_count, potmax_nr_p))
+if nr_n_count > 0 :
+    print('nonrewarded negative Mean : {0:.2f}, Min : {1:.2f}'.format(potsum_nr_n/nr_n_count, potmax_nr_n))
 
 with open(os.path.join(LOG_path,'dopa_pot.csv'), 'w', newline= '') as csvfile :
     potwriter = csv.writer(csvfile)

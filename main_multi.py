@@ -9,7 +9,7 @@ import time
 """
 Every Neurons and Synapses are called as their index (or ID)
 """
-MODEL = emodel.random_test_1
+MODEL = emodel.dopa_test_1
 
 TICKS = MODEL.ticks
 LOG_TICKS = MODEL.log_ticks
@@ -34,7 +34,9 @@ class Main_multi() :
         print('synapse :',len(self.s_list))
         self.synapse_connector()
 
+        print('Initiating Queues and Threads for Neurons')
         for i in range(MODEL.N_N_THREAD) :
+            print('{0}/{1}'.format(i+1, MODEL.N_N_THREAD))
             self.n_pre_Q.append(Queue())
             self.n_post_Q.append(Queue())
             self.n_potential_Q.append(Queue())
@@ -49,7 +51,10 @@ class Main_multi() :
                     TICKS - LOG_TICKS,
                 )
             ))
+
+        print('Initiating Queues and Threads for Synapses')
         for i in range(MODEL.N_S_THREAD) :
+            print('{0}/{1}'.format(i+1, MODEL.N_S_THREAD))
             self.s_pre_Q.append(Queue())
             self.s_post_Q.append(Queue())
             self.s_potential_Q.append(Queue())
@@ -64,32 +69,34 @@ class Main_multi() :
                     TICKS - LOG_TICKS,
                 )
             ))
-            self.s_n_dist = Process(
-                target = tf.s_to_n_distributer,
-                args = (
-                    self.n_potential_Q,
-                    self.s_potential_Q,
-                    MODEL.N_N_THREAD,
-                    MODEL.N_NEURON,
-                    MODEL.N_S_THREAD,
-                    TICKS,
-                    MODEL.ext_model,
-                    MODEL.ext_kwargs,
-                )
+        print('Initiating S_to_N_distributer')
+        self.s_n_dist = Process(
+            target = tf.s_to_n_distributer,
+            args = (
+                self.n_potential_Q,
+                self.s_potential_Q,
+                MODEL.N_N_THREAD,
+                MODEL.N_NEURON,
+                MODEL.N_S_THREAD,
+                TICKS,
+                MODEL.ext_model,
+                MODEL.ext_kwargs,
             )
-            self.n_s_dist = Process(
-                target= tf.n_to_s_distributer,
-                args= (
-                    self.s_pre_Q,
-                    self.s_post_Q,
-                    self.n_pre_Q,
-                    self.n_post_Q,
-                    MODEL.N_S_THREAD,
-                    MODEL.N_SYNAPSE,
-                    MODEL.N_N_THREAD,
-                    TICKS,
-                )
+        )
+        print('Initiating N_to_S_distributer')
+        self.n_s_dist = Process(
+            target= tf.n_to_s_distributer,
+            args= (
+                self.s_pre_Q,
+                self.s_post_Q,
+                self.n_pre_Q,
+                self.n_post_Q,
+                MODEL.N_S_THREAD,
+                MODEL.N_SYNAPSE,
+                MODEL.N_N_THREAD,
+                TICKS,
             )
+        )
 
     def synapse_connector(self) :
         for s in self.s_list :
@@ -112,10 +119,15 @@ class Main_multi() :
             rapidjson.dump(connections, logfile)
 
     def run(self) :
-        for n_p in self.n_procs :
+        print('Starting Neuron processes')
+        for idx, n_p in enumerate(self.n_procs) :
+            print('{0}/{1}'.format(idx+1,MODEL.N_N_THREAD))
             n_p.start()
-        for s_p in self.s_procs :
+        print('Starting Syapse processes')
+        for idx, s_p in enumerate(self.s_procs) :
+            print('{0}/{1}'.format(idx+1,MODEL.N_S_THREAD))
             s_p.start()
+        print('Starting distribution processes and Starting Simulations')
         self.s_n_dist.start()
         self.n_s_dist.start()
         # total_potentials = []

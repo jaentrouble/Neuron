@@ -93,7 +93,7 @@ class random_test_1() :
     }
 
 class dopa_test_1 () :
-    ticks = 20000
+    ticks = 1000
     log_ticks = 2000
 
     inpt_n = 10
