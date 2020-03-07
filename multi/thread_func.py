@@ -2,6 +2,7 @@ from multiprocessing import Queue
 from common.constants import *
 import rapidjson
 import os
+import tqdm
 
 def neuron_init(n_list : list, pre_Q : Queue, post_Q : Queue, Potential_Q : Queue, num : int, log_begin = -1):
     potent_log = [] # [[id, potential],...]
@@ -34,7 +35,7 @@ def neuron_init(n_list : list, pre_Q : Queue, post_Q : Queue, Potential_Q : Queu
                 pre_fired.extend(e)
                 post_fired.extend(i)
                 tmp_fired.append(idx)
-        
+
         if count >= log_begin :
             potent_log.append(tmp_potent)
             fired_log.append(tmp_fired)
@@ -103,9 +104,7 @@ def s_to_n_distributer(n_pot_q : list, s_pot_q : list, N_N_THREAD : int,
     total_potentials = []
     for _ in range(N_N_THREAD) :
         total_potentials.append([])
-    for t in range(ticks) :
-        if not t % 100 :
-            print('Ticks : {0}/{1}'.format(t, ticks))
+    for t in tqdm.trange(ticks, ncols = 150, mininterval = 1, unit = 'tick') :
         external = ext_model(**ext_kwargs)
         for n in external :
             total_potentials[n[-1]// N_NEURON].append(n)

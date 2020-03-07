@@ -57,6 +57,8 @@ def dopa_weight_modify(delta_prepost, delta_postdopa, dopa_q, weight) :
         weight_delta_pd = WEIGHT_dopa_pd + delta_firedopa*WEIGHT_dopa_tan_pd
         
         delta_weight = weight_delta_pp * weight_delta_pd * WEIGHT_F_max * WEIGHT_max * dopa/DOPA_normal
+        # If pre-post is anti hebbian & dopamine signal is negative,
+        # preventing delta_weight becoming positive
         if weight_delta_pp < 0 and dopa < 0 :
             delta_weight *= -1
         return min(max(weight + delta_weight + SYNAPSE_decay, 0), WEIGHT_max)

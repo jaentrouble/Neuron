@@ -34,14 +34,14 @@ DOPA_max = 8
 
 WEIGHT_max = 3
 WEIGHT_F_max = 0.005
-WEIGHT_t_0 = 8
+WEIGHT_t_0 = 16
 WEIGHT_tan = (WEIGHT_F_max * WEIGHT_max)/WEIGHT_t_0
 WEIGHT_tan_bias = WEIGHT_F_max * WEIGHT_max
 
 WEIGHT_dopa_pp = 2
 WEIGHT_dopa_pd = 2
 WEIGHT_dopa_constant = 1
-WEIGHT_dopa_in_ex_ratio = 1.1
+WEIGHT_dopa_in_ex_ratio = 1
 WEIGHT_dopa_tan_pp = WEIGHT_dopa_pp/WEIGHT_t_0
 WEIGHT_dopa_tan_pd = WEIGHT_dopa_pd/WEIGHT_t_0
 

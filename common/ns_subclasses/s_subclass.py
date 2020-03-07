@@ -17,19 +17,28 @@ class S_Dopa_dependent(Synapse) :
         self.t_dopa = 0
         self.dopa_neurons = dopa_neurons
         self.discount = discount
+        self.dopa_passed = False
+        self.dopa_amount = None
 
     def pre_fired(self, arg) :
         if arg[0] == NT_DEFAULT :
             self.t_pre = self.time
             self.fired = True
         elif arg[0] == NT_DOPA :
-            self.dopa_passed(arg[1])
+            self.dopa_passed = True
+            self.t_dopa = self.time
+            self.dopa_amount = arg[1]
+
+    def tick(self) :
+        super().tick()
+        if self.dopa_passed :
+            self.dopa_update(self.dopa_amount)
+            self.dopa_passed = False
 
     def post_fired(self, arg) :
         self.t_post = self.time
 
-    def dopa_passed(self, amount) :
-        self.t_dopa = self.time
+    def dopa_update(self, amount) :
         self.weight = tools.dopa_weight_modify(
             self.t_pre - self.t_post,
             self.t_post - self.t_dopa - 2, # timing adjustment
@@ -53,8 +62,7 @@ class S_Dopa_pre_only(S_Dopa_dependent) :
     Same as S_Dopa_dependent,
     just this doesn't care post synaptic fire
     """
-    def dopa_passed(self, amount) :
-        self.t_dopa = self.time
+    def dopa_update(self, amount) :
         self.weight = tools.dopa_weight_modify(
             -2,
             self.t_pre - self.t_dopa,
