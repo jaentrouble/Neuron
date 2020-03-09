@@ -9,6 +9,7 @@ from common.constants import *
 from common import tools
 import csv
 import time
+from scipy import signal
 MODEL = emodel.dopa_test_1
 
 
@@ -134,6 +135,7 @@ fig = make_subplots(rows= 3, cols= 1)
 for idx, record in enumerate(y_log1) :
     if idx < MODEL.dopa :
         name = 'Dopa'
+        fig.add_trace(go.Scatter(x = list(range(ticks)), y = signal.savgol_filter(record,101,1), name= 'smooth'), row = 1, col= 1)
     else :
         name = 'Reward'
     fig.add_trace(go.Scatter(x = list(range(ticks)), y = record, name= name), row = 1, col= 1)
