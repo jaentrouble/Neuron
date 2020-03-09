@@ -8,18 +8,20 @@ from common.models import experiment_model as emodel
 from common.constants import *
 from common import tools
 import csv
+import time
 MODEL = emodel.dopa_test_1
 
 
 n_log_names = []
 s_log_names = []
+load_strt_time = time.time()
 for i in range(MODEL.N_N_THREAD) :
     n_log_names.append(LOG_multi_neuron_name.format(i))
 for i in range(MODEL.N_S_THREAD) :
     s_log_names.append(LOG_multi_synapse_name.format(i))
 log = log_loader.Log(n_log_names, s_log_names, LOG_connection_name)
 print('{} ticks of log loaded'.format(log.get_max_tick()+1))
-
+print('{:.2f} seconds'.format(time.time() - load_strt_time))
 
 ######################### Customize
 x_log1 = log.get_total_pot_log()
@@ -97,6 +99,7 @@ if nr_p_count > 0 :
     print('nonrewarded positive Mean : {0:.2f}, Max : {1:.2f}'.format(potsum_nr_p/nr_p_count, potmax_nr_p))
 if nr_n_count > 0 :
     print('nonrewarded negative Mean : {0:.2f}, Min : {1:.2f}'.format(potsum_nr_n/nr_n_count, potmax_nr_n))
+print('{:.2f} seconds passed'.format(time.time()-load_strt_time))
 
 with open(os.path.join(LOG_path,'dopa_pot.csv'), 'w', newline= '') as csvfile :
     potwriter = csv.writer(csvfile)
@@ -142,3 +145,4 @@ for record in y_log3 :
     fig.add_trace(go.Scatter(x = list(range(ticks)), y = record), row = 3, col= 1)
 fig.update_layout(template = 'plotly_dark', autosize = False, width = 1000, height = 1000)
 fig.show()
+print('{:.2f} seconds passed'.format(time.time()-load_strt_time))

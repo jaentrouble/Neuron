@@ -1,2 +1,45 @@
 4N*100/4S*1500, 2000tick = 26.24
 4N*100/8S*1500, 2000tick = 47.83
+
+Before rounding
+logneuron 35,557KB, 9,100KB
+logsynapse 84,012KB, 70,795KB, 101,623KB, 7,005KB
+loading
+23.59
+23.60
+36.78
+NM_NATIVE
+12.63
+12.64
+25.26
+
+After rounding
+np.round
+total 80.82
+logneuron 40,944KB, 13,243KB
+logsynapse 79,843KB, 83,317KB, 85,544KB, 8,634KB
+loading
+13.25
+13.27
+26.39
+
+custom rounding
+total 75.67
+logneuron 34,224KB, 11,061KB
+logsynapse 67,212KB, 70,721KB, 72,935KB, 7,325KB
+loading
+13.02
+13.04
+26.83
+
+if count>=log_start
+total 71.35
+
+if 0 -> int 0
+total 70.65
+logneuron 28,606KB, 8,910KB
+logsynapse 58,426KB, 59,823KB, 67,957KB, 6,197KB
+loading
+12.37
+12.39
+25.23

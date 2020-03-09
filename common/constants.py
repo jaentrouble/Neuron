@@ -45,7 +45,7 @@ WEIGHT_dopa_in_ex_ratio = 1
 WEIGHT_dopa_tan_pp = WEIGHT_dopa_pp/WEIGHT_t_0
 WEIGHT_dopa_tan_pd = WEIGHT_dopa_pd/WEIGHT_t_0
 
-NEURON_threshold = 4
+NEURON_threshold = 3
 NEURON_rest = 0
 NEURON_undershoot = -1
 NEURON_decay = 0.3

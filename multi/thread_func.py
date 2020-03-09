@@ -3,6 +3,8 @@ from common.constants import *
 import rapidjson
 import os
 import tqdm
+import numpy as np
+import math
 
 def neuron_init(n_list : list, pre_Q : Queue, post_Q : Queue, Potential_Q : Queue, num : int, log_begin = -1):
     potent_log = [] # [[id, potential],...]
@@ -29,12 +31,18 @@ def neuron_init(n_list : list, pre_Q : Queue, post_Q : Queue, Potential_Q : Queu
         tmp_potent = []
         tmp_fired = []
         for idx, n in enumerate(n_list, start = start_index) :
-            tmp_potent.append([idx, n.get_potential()])
+            if count >= log_begin :
+                p = n.get_potential()
+                if not p :
+                    tmp_potent.append([idx, 0])
+                else :
+                    tmp_potent.append([idx, int(p*100+0.5)/100])
             if n.is_fired() :
                 i, e = n.get_signal()
                 pre_fired.extend(e)
                 post_fired.extend(i)
-                tmp_fired.append(idx)
+                if count >= log_begin :
+                    tmp_fired.append(idx)
 
         if count >= log_begin :
             potent_log.append(tmp_potent)
@@ -47,8 +55,8 @@ def neuron_init(n_list : list, pre_Q : Queue, post_Q : Queue, Potential_Q : Queu
     with open(os.path.join(LOG_path, LOG_multi_neuron_name.format(num)), 'w') as logfile :
         rapidjson.dump({
             str(MULTI_potent_log) : potent_log,
-            str(MULTI_fired_neuron_log) : fired_log,
-        }, logfile)
+            str(MULTI_fired_neuron_log) : fired_log
+        }, logfile, number_mode= rapidjson.NM_NATIVE)
 
 def synapse_init(s_list : list, pre_Q : Queue, post_Q : Queue, Potential_Q : Queue, num : int, log_begin = -1) :
     weight_log = []
@@ -78,10 +86,16 @@ def synapse_init(s_list : list, pre_Q : Queue, post_Q : Queue, Potential_Q : Que
         tmp_weight = []
         tmp_fired = []
         for idx, s in enumerate(s_list, start = start_index) :
-            tmp_weight.append([idx, s.get_weight()])
+            if count >= log_begin :
+                w = s.get_weight()
+                if not w :
+                    tmp_weight.append([idx, 0])
+                else :
+                    tmp_weight.append([idx, int(w*100+0.5)/100])
             if s.is_fired():
                 fired_to_neurons.append(s.get_signal())
-                tmp_fired.append(idx)
+                if count >= log_begin :
+                    tmp_fired.append(idx)
 
         if count >= log_begin :
             weight_log.append(tmp_weight)
@@ -94,7 +108,7 @@ def synapse_init(s_list : list, pre_Q : Queue, post_Q : Queue, Potential_Q : Que
         rapidjson.dump({
             str(MULTI_weight_log) : weight_log,
             str(MULTI_fired_synapse_log) : fired_log,
-        }, logfile)
+        }, logfile, number_mode=rapidjson.NM_NATIVE)
 # if __name__ == '__main__' :
 #     freeze_support()
 

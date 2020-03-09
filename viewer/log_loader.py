@@ -10,17 +10,17 @@ class Log() :
         fired_synapse = []
         for nl in n_log_names :
             with open(os.path.join(LOG_path, nl), 'r') as logfile :
-                tmp = rapidjson.load(logfile)
+                tmp = rapidjson.load(logfile, number_mode=rapidjson.NM_NATIVE)
                 potent.append(tmp[str(MULTI_potent_log)])
                 fired_neuron.append(tmp[str(MULTI_fired_neuron_log)])
         for sl in s_log_names :
             with open(os.path.join(LOG_path, sl), 'r') as logfile :
-                tmp = rapidjson.load(logfile)
+                tmp = rapidjson.load(logfile, number_mode=rapidjson.NM_NATIVE)
                 weight.append(tmp[str(MULTI_weight_log)])
                 fired_synapse.append(tmp[str(MULTI_fired_synapse_log)])
 
         with open(os.path.join(LOG_path, c_log_name)) as logfile :
-            self.connections = rapidjson.load(logfile)
+            self.connections = rapidjson.load(logfile, number_mode=rapidjson.NM_NATIVE)
 
         self.merged_potent = []
         for t in range(len(potent[0])) :
