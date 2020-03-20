@@ -9,7 +9,7 @@ import time
 """
 Every Neurons and Synapses are called as their index (or ID)
 """
-MODEL = emodel.dopa_test_1
+MODEL = emodel.random_test_1
 
 TICKS = MODEL.ticks
 LOG_TICKS = MODEL.log_ticks

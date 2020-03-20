@@ -44,7 +44,7 @@ class CLASSNAME () :
 """
 
 class random_test_1() :
-    ticks = 20
+    ticks = 10000
     log_ticks = 2
     
     #Numbers of Threads to (N)eurons and (S)ynapses
