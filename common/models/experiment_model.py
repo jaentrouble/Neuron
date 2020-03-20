@@ -49,10 +49,10 @@ class random_test_1() :
     
     #Numbers of Threads to (N)eurons and (S)ynapses
     N_N_THREAD = 4
-    N_S_THREAD = 8
+    N_S_THREAD = 12
     # numbers per Thread
     N_NEURON = 100
-    N_SYNAPSE = 1500
+    N_SYNAPSE = 1000
     N_NUM = N_NEURON * N_N_THREAD
     S_NUM = N_SYNAPSE * N_S_THREAD
     # Excitatory synapse percentage

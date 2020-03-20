@@ -1,4 +1,4 @@
-from multiprocessing import Queue
+from multiprocessing import Queue, Barrier
 from common.constants import *
 import rapidjson
 import os
@@ -6,21 +6,33 @@ import tqdm
 import numpy as np
 import math
 
-def neuron_init(n_list : list, pre_Q : Queue, post_Q : Queue, Potential_Q : Queue, num : int, log_begin = -1):
+def neuron_init(n_list : list, pre_Q_list : list, post_Q_list : list, Potential_Q_list : list,
+                barrier : Barrier, N_SYNAPSE : int, num : int, ticks : int, log_begin = -1,):
     potent_log = [] # [[id, potential],...]
     fired_log = [] # [id,...]
     start_index = n_list[0].get_id()
-    count = 0
-    while True :
-        fired_to_neurons = Potential_Q.get()
-        pre_fired = []
-        post_fired = []
-        if fired_to_neurons == MULTI_sentinel :
+    N_S_THREAD = len(pre_Q_list)
+    pre_fired = [[] for _ in range(N_S_THREAD)]
+    post_fired = [[] for _ in range(N_S_THREAD)]
+    for count in range(ticks) :
+        # Put to synapse thread Queues
+        for idx, (pre, post) in enumerate(zip(pre_fired, post_fired)) :
+            pre_Q_list[idx].put(pre)
+            post_Q_list[idx].put(post)
+        # Wait until synapse threads gets all items
+        barrier.wait()
+        # Get all from neuron's Queues and start calculation
+        fired_to_neurons = []
+        for q in Potential_Q_list :
+            fired_to_neurons.extend(q.get())
+        pre_fired = [[] for _ in range(N_S_THREAD)]
+        post_fired = [[] for _ in range(N_S_THREAD)]
+        # if fired_to_neurons == MULTI_sentinel :
             # Log_q.put({
             #     MULTI_potent_log : potent_log,
             #     MULTI_fired_neuron_log : fired_log,
             # })
-            break
+            # break
         for n in n_list :
             n.tick()
         # 4
@@ -39,8 +51,10 @@ def neuron_init(n_list : list, pre_Q : Queue, post_Q : Queue, Potential_Q : Queu
                     tmp_potent.append([idx, int(p*100+0.5)/100])
             if n.is_fired() :
                 i, e = n.get_signal()
-                pre_fired.extend(e)
-                post_fired.extend(i)
+                for pre in e :
+                    pre_fired[pre[-1]//N_SYNAPSE].append(pre)
+                for post in i :
+                    post_fired[post[-1]//N_SYNAPSE].append(post)
                 if count >= log_begin :
                     tmp_fired.append(idx)
 
@@ -48,9 +62,8 @@ def neuron_init(n_list : list, pre_Q : Queue, post_Q : Queue, Potential_Q : Queu
             potent_log.append(tmp_potent)
             fired_log.append(tmp_fired)
 
-        count += 1
-        pre_Q.put(pre_fired)
-        post_Q.put(post_fired)
+        # pre_Q.put(pre_fired)
+        # post_Q.put(post_fired)
 
     with open(os.path.join(LOG_path, LOG_multi_neuron_name.format(num)), 'w') as logfile :
         rapidjson.dump({
@@ -58,21 +71,32 @@ def neuron_init(n_list : list, pre_Q : Queue, post_Q : Queue, Potential_Q : Queu
             str(MULTI_fired_neuron_log) : fired_log
         }, logfile, number_mode= rapidjson.NM_NATIVE)
 
-def synapse_init(s_list : list, pre_Q : Queue, post_Q : Queue, Potential_Q : Queue, num : int, log_begin = -1) :
+def synapse_init(s_list : list, pre_Q_list : list, post_Q_list : list, Potential_Q_list : list,
+                 barrier : Barrier, N_NEURON : int, num : int, ticks : int, log_begin = -1) :
     weight_log = []
     fired_log = []
     start_index = s_list[0].get_id()
-    count = 0
-    while True :
-        pre_fired = pre_Q.get()
-        post_fired = post_Q.get()
+    N_N_THREAD = len(Potential_Q_list)
+    fired_to_neurons = [[] for _ in range(N_N_THREAD)]
+    for count in range(ticks) :
+        pre_fired = []
+        post_fired = []
+        # Get from pre/post queue, sent by Neurons
+        for pre_q, post_q in zip(pre_Q_list, post_Q_list):
+            pre_fired.extend(pre_q.get())
+            post_fired.extend(post_q.get())
+        # Tell finished getting from queues
+        barrier.wait()
+        # Put items BEFORE calculation starts, i.e. putting the items from the past iter.
+        for idx, ftn in enumerate(fired_to_neurons) :
+            Potential_Q_list[idx].put(ftn)
         if pre_fired == MULTI_sentinel or post_fired == MULTI_sentinel :
             # Log_q.put({
             #     MULTI_weight_log : weight_log,
             #     MULTI_fired_synapse_log : fired_log,
             # })
             break
-        fired_to_neurons = []
+        fired_to_neurons = [[] for _ in range(N_N_THREAD)]
         for s in s_list :
             s.tick()
 
@@ -93,7 +117,8 @@ def synapse_init(s_list : list, pre_Q : Queue, post_Q : Queue, Potential_Q : Que
                 else :
                     tmp_weight.append([idx, int(w*100+0.5)/100])
             if s.is_fired():
-                fired_to_neurons.append(s.get_signal())
+                pot = s.get_signal()
+                fired_to_neurons[pot[-1]//N_NEURON].append(pot)
                 if count >= log_begin :
                     tmp_fired.append(idx)
 
@@ -101,8 +126,7 @@ def synapse_init(s_list : list, pre_Q : Queue, post_Q : Queue, Potential_Q : Que
             weight_log.append(tmp_weight)
             fired_log.append(tmp_fired)
 
-        count += 1
-        Potential_Q.put(fired_to_neurons)
+        # Potential_Q.put(fired_to_neurons)
 
     with open(os.path.join(LOG_path, LOG_multi_synapse_name.format(num)), 'w') as logfile :
         rapidjson.dump({
@@ -111,6 +135,18 @@ def synapse_init(s_list : list, pre_Q : Queue, post_Q : Queue, Potential_Q : Que
         }, logfile, number_mode=rapidjson.NM_NATIVE)
 # if __name__ == '__main__' :
 #     freeze_support()
+
+def ext_pot_init(ext_model, ext_kwargs, Potential_Q_list : list, barrier : Barrier,
+                 N_NEURON : int, ticks : int):
+    N_N_THREAD = len(Potential_Q_list)
+    for count in range(ticks) :
+        total_potentials = [[] for _ in range(N_N_THREAD)]
+        external = ext_model(**ext_kwargs)
+        for n in external :
+            total_potentials[n[-1]// N_NEURON].append(n)
+        barrier.wait()
+        for idx, ftn in enumerate(total_potentials) :
+            Potential_Q_list[idx].put(ftn)
 
 def s_to_n_distributer(n_pot_q : list, s_pot_q : list, N_N_THREAD : int,
                        N_NEURON : int, N_S_THREAD : int, ticks : int,
