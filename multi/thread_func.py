@@ -14,17 +14,28 @@ def neuron_init(n_list : list, pre_Q_list : list, post_Q_list : list, Potential_
     N_S_THREAD = len(pre_Q_list)
     pre_fired = [[] for _ in range(N_S_THREAD)]
     post_fired = [[] for _ in range(N_S_THREAD)]
+    if num < N_S_THREAD :
+        put_order = np.arange(num, num+ N_S_THREAD)%N_S_THREAD
+        get_order = np.arange(num + N_S_THREAD, num, -1)%N_S_THREAD
+        # Don't forget to get external potentials
+        get_order = np.append(get_order, -1)
+    else :
+        put_order = np.arange(N_S_THREAD)
+        get_order = np.arange(N_S_THREAD-1, -1, -1)
+        # Don't forget to get external potentials
+        get_order = np.append(get_order, -1)
+    
     for count in range(ticks) :
         # Put to synapse thread Queues
-        for idx, (pre, post) in enumerate(zip(pre_fired, post_fired)) :
-            pre_Q_list[idx].put(pre)
-            post_Q_list[idx].put(post)
+        for idx in put_order :
+            pre_Q_list[idx].put(pre_fired[idx])
+            post_Q_list[idx].put(post_fired[idx])
         # Wait until synapse threads gets all items
         barrier.wait()
         # Get all from neuron's Queues and start calculation
         fired_to_neurons = []
-        for q in Potential_Q_list :
-            fired_to_neurons.extend(q.get())
+        for idx in get_order :
+            fired_to_neurons.extend(Potential_Q_list[idx].get())
         pre_fired = [[] for _ in range(N_S_THREAD)]
         post_fired = [[] for _ in range(N_S_THREAD)]
         # if fired_to_neurons == MULTI_sentinel :
@@ -78,18 +89,25 @@ def synapse_init(s_list : list, pre_Q_list : list, post_Q_list : list, Potential
     start_index = s_list[0].get_id()
     N_N_THREAD = len(Potential_Q_list)
     fired_to_neurons = [[] for _ in range(N_N_THREAD)]
+    if num < N_N_THREAD :
+        put_order = np.arange(num, num+ N_N_THREAD)%N_N_THREAD
+        get_order = np.arange(num + N_N_THREAD, num, -1)%N_N_THREAD
+    else :
+        put_order = np.arange(N_N_THREAD)
+        get_order = np.arange(N_N_THREAD-1, -1, -1)
+
     for count in range(ticks) :
         pre_fired = []
         post_fired = []
         # Get from pre/post queue, sent by Neurons
-        for pre_q, post_q in zip(pre_Q_list, post_Q_list):
-            pre_fired.extend(pre_q.get())
-            post_fired.extend(post_q.get())
+        for idx in get_order:
+            pre_fired.extend(pre_Q_list[idx].get())
+            post_fired.extend(post_Q_list[idx].get())
         # Tell finished getting from queues
         barrier.wait()
         # Put items BEFORE calculation starts, i.e. putting the items from the past iter.
-        for idx, ftn in enumerate(fired_to_neurons) :
-            Potential_Q_list[idx].put(ftn)
+        for idx in put_order :
+            Potential_Q_list[idx].put(fired_to_neurons[idx])
         if pre_fired == MULTI_sentinel or post_fired == MULTI_sentinel :
             # Log_q.put({
             #     MULTI_weight_log : weight_log,

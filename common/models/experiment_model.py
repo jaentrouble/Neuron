@@ -109,9 +109,9 @@ class dopa_test_1 () :
     rwrd_limit = 3
 
     N_N_THREAD = 2
-    N_S_THREAD = 4
+    N_S_THREAD = 10
     N_NEURON = 350
-    N_SYNAPSE = 650
+    N_SYNAPSE = 210
     cmbi_start = inpt_n
     outpt_start = cmbi_start + tools.combi(inpt_n, combi_r)
     val_start = outpt_start + outpt

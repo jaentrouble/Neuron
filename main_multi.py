@@ -231,7 +231,7 @@ class Main_multi() :
             n_p.join()
         for s_p in self.s_procs :
             s_p.join()
-
+        self.ext_pot_proc.join()
         print('total time : {:.2f}'.format(time.time()-init_time))
 
 if __name__ == '__main__' :
