@@ -1,4 +1,2 @@
 # Neuron
- i'm no com-maeng
-
-Project... Antonio Salieri
+ Neuron simulation, without grad.
